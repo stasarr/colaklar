@@ -1,0 +1,228 @@
+<head>
+    <title>Ürünler - Çolaklar Yalıtım</title>
+    <meta content="Çolaklar yalıtım olarak satışını yaptığımız ürünler için bir ürün kataloğu." name="description" />
+    <meta property="og:image" content="http://localhost:3000/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="keywords" content="ürünler, yalıtım ürünleri, ürün kataloğu">
+</head>
+<%- include ('../partials/header') %>
+<div class="explore-area rn-section-gapTop">
+    <div class="container">
+        <div class="row mb--40">
+            <div class="col-12">
+                <h3 class="title">Ürün Kataloğumuz</h3>
+            </div>
+            <div class="col-md-12 form-wrapper-one">
+                <div class="input-box col-md-12 pb--20">
+                    <label for="name" class="form-label">Katalogta Ürün Ara</label>
+                    <div class="d-flex">
+                        <input id="searchBox" placeholder="ör. `Solid Polikarbon Levha`">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-5">
+            <div class="col-lg-3 order-2 order-lg-1">
+                <div class="nu-course-sidebar">
+
+                    <!-- Start Widget Wrapper  -->
+                    <div class="nuron-expo-filter-widget widget-category">
+                        <div class="inner">
+                            <h5 class="widget-title">Kategoriler</h5>
+                            <div class="content">
+                                <% allCategory.forEach((ctg, index) => {%>
+                                <div class="nuron-form-check">
+                                    <input type="checkbox" class="category-filter" data-category-id="<%= ctg._id %>" id="category-<%= ctg._id %>">
+                                    <label style="user-select: none;" for="category-<%= ctg._id %>"><%= ctg.name %> <span>(24)</span></label>
+                                </div>
+                                <% }) %>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Widget Wrapper  -->
+                </div>
+            </div>
+            <div class="col-lg-9 order-1 order-lg-2">
+                <div class="row g-5" id="product-container">
+                    <% allProduct.forEach((product) => {%>
+                    <!-- start single product -->
+                    <div class="col-lg-4 col-md-6 col-sm-12 product-item" data-category-id="<%= product.category %>">
+                        <div class="product-style-one no-overlay with-placeBid">
+                            <div class="card-thumbnail">
+                                <a href="/urunler/<%= product.productLink %>">
+                                    <img src="<%= product.productImage1 %>" style="aspect-ratio: 1 / 1; object-fit: cover;" alt="NFT_portfolio">
+                                </a>
+                                <a href="/urunler/<%= product.productLink %>" class="btn btn-primary">Ürünü İncele</a>
+                            </div>
+                            <a href="/urunler/<%= product.productLink %>"><span class="product-name mt-5"><%= product.productName %></span></a>
+                            <div class="bid-react-area">
+                                <div class="last-bid">
+                                    <% 
+                                        let selectedCategory = (Array.isArray(allCategory) && product.category) 
+                                            ? allCategory.find(cat => cat._id?.toString() === product.category?.toString()) 
+                                            : null;
+                                    %>
+                                    <%= selectedCategory ? selectedCategory.name : 'Bilinmeyen Kategori' %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end single product -->
+                    <% }) %>
+                    <nav class="pagination-wrapper" aria-label="Page navigation example">
+                        <ul class="pagination single-column-blog" id="pagination">
+                            <li class="page-item" id="prev-page"><a class="page-link" href="#">Previous</a></li>
+                            <li class="page-item"><a class="page-link active" href="#" id="page-1">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#" id="page-2">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#" id="page-3">3</a></li>
+                            <li class="page-item" id="next-page"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Ürün listeleme, sayfalandırma -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const checkboxes = document.querySelectorAll('.category-filter');
+        const products = [...document.querySelectorAll('.product-item')]; // NodeList'i diziye dönüştürme
+        const categories = document.querySelectorAll('.nuron-form-check');
+        
+        // Ürünlerin her bir kategorisini saymak
+        const categoryProductCount = {};
+
+        products.forEach(product => {
+            const categoryId = product.getAttribute('data-category-id');
+            categoryProductCount[categoryId] = (categoryProductCount[categoryId] || 0) + 1;
+        });
+
+        // Kategorilerin yanında ürün sayısını güncelleme
+        categories.forEach(category => {
+            const categoryId = category.querySelector('input').getAttribute('data-category-id');
+            const productCount = categoryProductCount[categoryId] || 0;
+            category.querySelector('label span').textContent = `(${productCount})`;
+            if (productCount === 0) {
+                category.style.display = 'none'; // Ürün olmayan kategoriyi gizleme
+            }
+        });
+
+        // Arama işlevi
+        searchBox.addEventListener('input', () => {
+            const searchTerm = searchBox.value.toLowerCase();
+
+            // Arama sonucunda uygun ürünleri filtreleme
+            filteredProducts = products.filter(product => {
+                const productName = product.querySelector('.product-name').textContent.toLowerCase();
+                return productName.includes(searchTerm);
+            });
+
+            // Sayfayı yeniden yükle ve sayfa sınırını uygula
+            currentPage = 1;
+            showPage(currentPage);
+        });
+
+        let filteredProducts = [...products]; // Filtrelenmiş ürünleri burada saklayacağız
+
+        // Filtreleme işlevi
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const selectedCategories = [...checkboxes]
+                    .filter(checkbox => checkbox.checked)
+                    .map(checkbox => checkbox.getAttribute('data-category-id'));
+
+                // Filtreleme işlemi
+                filteredProducts = products.filter(product => {
+                    const productCategory = product.getAttribute('data-category-id');
+                    return selectedCategories.length === 0 || selectedCategories.includes(productCategory);
+                });
+
+                // Sayfayı yeniden yükle ve sayfa sınırını uygula
+                currentPage = 1;
+                showPage(currentPage);
+            });
+        });
+
+        const productsPerPage = 6;
+        let currentPage = 1;
+
+        function showPage(page) {
+            const startIndex = (page - 1) * productsPerPage;
+            const endIndex = page * productsPerPage;
+
+            // Tüm ürünleri gizle
+            products.forEach(product => {
+                product.style.display = 'none';
+            });
+
+            // Filtrelenmiş ürünleri göster
+            filteredProducts.forEach((product, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    product.style.display = 'block';
+                }
+            });
+
+            // Update pagination buttons
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            // Previous button
+            const prevButton = document.createElement('li');
+            prevButton.classList.add('page-item');
+            prevButton.innerHTML = `<a class="page-link mx-2" href="#">Geri</a>`;
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    showPage(currentPage);
+                }
+            });
+            pagination.appendChild(prevButton);
+
+            // Page number buttons
+            const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('li');
+                pageButton.classList.add('page-item');
+                pageButton.innerHTML = `<a class="page-link mx-2" href="#">${i}</a>`;
+                pageButton.addEventListener('click', () => {
+                    currentPage = i;
+                    showPage(currentPage);
+                });
+                const pageLink = pageButton.querySelector('a');
+                if (i === currentPage) {
+                    pageLink.classList.add('active');
+                } else {
+                    pageLink.classList.remove('active');
+                }
+                pagination.appendChild(pageButton);
+            }
+
+            // Next button
+            const nextButton = document.createElement('li');
+            nextButton.classList.add('page-item');
+            nextButton.innerHTML = `<a class="page-link mx-2" href="#">İleri</a>`;
+            nextButton.addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    showPage(currentPage);
+                }
+            });
+            pagination.appendChild(nextButton);
+
+            // Disable/Enable Previous and Next buttons
+            prevButton.style.display = currentPage === 1 ? 'none' : 'block';
+            nextButton.style.display = currentPage === totalPages ? 'none' : 'block';
+        }
+
+        // Initial page load
+        showPage(currentPage);
+    });
+</script>
+
+
+
+<%- include ('../partials/footer') %>

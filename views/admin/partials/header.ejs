@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html><!-- [Head] start -->
+
+<head>
+    <title>Admin | <%= settings.siteName %></title>
+    <!-- [Meta] -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description"
+        content="Able Pro is trending dashboard template made using Bootstrap 5 design framework. Able Pro is available in Bootstrap, React, CodeIgniter, Angular,  and .net Technologies.">
+    <meta name="keywords"
+        content="Bootstrap admin template, Dashboard UI Kit, Dashboard Template, Backend Panel, react dashboard, angular dashboard">
+    <meta name="author" content="Phoenixcoded">
+
+    <!-- [Favicon] icon -->
+    <link rel="icon" href="<%= settings.siteFavicon %>" type="image/x-icon">
+    <!-- [Font] Family -->
+    <link rel="stylesheet" href="/dashboard/assets/fonts/inter/inter.css" id="main-font-link">
+
+    <!-- [Tabler Icons] https://tablericons.com -->
+    <link rel="stylesheet" href="/dashboard/assets/fonts/tabler-icons.min.css">
+    <!-- [Feather Icons] https://feathericons.com -->
+    <link rel="stylesheet" href="/dashboard/assets/fonts/feather.css">
+    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
+    <link rel="stylesheet" href="/dashboard/assets/fonts/fontawesome.css">
+    <!-- [Material Icons] https://fonts.google.com/icons -->
+    <link rel="stylesheet" href="/dashboard/assets/fonts/material.css">
+    <!-- [Template CSS Files] -->
+    <link rel="stylesheet" href="/dashboard/assets/css/style.css" id="main-style-link">
+    <link rel="stylesheet" href="/dashboard/assets/css/style-preset.css">
+    <link rel="stylesheet" href="/dashboard/assets/css/uikit.css">
+    <link rel="stylesheet" href="/dashboard/assets/css/plugins/notifier.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../assets/css/plugins/dropzone.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- [Page specific CSS] start -->
+    <link href="/assets/css/plugins/animate.min.css" rel="stylesheet" type="text/css">
+    <!-- [Page specific CSS] end -->
+
+</head>
+<!-- [Head] end -->
+<!-- [Body] Start -->
+
+<body data-pc-theme_contrast="" data-pc-sidebar-caption="true" data-pc-preset="preset-1" data-pc-direction="ltr"
+    data-pc-theme="light">
+    <!-- [ Pre-loader ] start -->
+
+    <!-- [ Pre-loader ] End -->
+    <%- include ('../partials/sidebar') %>
+        <!-- [ Header Topbar ] start -->
+        <header class="pc-header">
+            <div class="header-wrapper"> <!-- [Mobile Media Block] start -->
+                <div class="me-auto pc-mob-drp">
+                    <ul class="list-unstyled">
+                        <!-- ======= Menu collapse Icon ===== -->
+                        <li class="pc-h-item pc-sidebar-collapse">
+                            <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
+                                <i class="ti ti-menu-2"></i>
+                            </a>
+                        </li>
+                        <li class="pc-h-item pc-sidebar-popup">
+                            <a href="#" class="pc-head-link ms-0" id="mobile-collapse">
+                                <i class="ti ti-menu-2"></i>
+                            </a>
+                        </li>
+                        <li class="dropdown pc-h-item">
+                            <a class="pc-head-link dropdown-toggle arrow-none m-0 trig-drp-search"
+                                data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
+                                aria-expanded="false">
+                                <svg class="pc-icon">
+                                    <use xlink:href="#custom-search-normal-1"></use>
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu pc-h-dropdown drp-search">
+                                <form class="px-3 py-2">
+                                    <input type="search" class="form-control border-0 shadow-none"
+                                        placeholder="Search here. . .">
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- [Mobile Media Block end] -->
+                <div class="ms-auto">
+                    <ul class="list-unstyled">
+                        <li class="dropdown pc-h-item">
+                            <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
+                                role="button" aria-haspopup="false" aria-expanded="false">
+                                <svg class="pc-icon">
+                                    <use xlink:href="#custom-setting-2"></use>
+                                </svg>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end pc-h-dropdown">
+                                <% if (currentUser.role == "admin") { %>
+                                <a href="/admin/settings" class="dropdown-item">
+                                    <i class="ti ti-settings"></i>
+                                    <span>Site ayarları</span>
+                                </a>
+                                <% } %>
+                                <a href="/admin/product-add" class="dropdown-item">
+                                    <i class="ti ti-column-insert-right"></i>
+                                    <span>Ürün Ekle</span>
+                                </a>
+                                <a href="/admin/product-list" class="dropdown-item">
+                                    <i class="ti ti-color-swatch"></i>
+                                    <span>Ürünler</span>
+                                </a>
+                                <a href="/admin/change-password" class="dropdown-item">
+                                    <i class="ti ti-repeat"></i>
+                                    <span>Şifre değiştir</span>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="dropdown pc-h-item header-user-profile">
+                            <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
+                                role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
+                                <img src="<%= currentUser.avatar %>" width="40" height="40" alt="user-image"
+                                    class="user-avtar">
+                            </a>
+                            <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
+                                <div class="dropdown-header d-flex align-items-center justify-content-between">
+                                    <h5 class="m-0">Profil</h5>
+                                </div>
+                                <div class="dropdown-body">
+                                    <div class="profile-notification-scroll position-relative"
+                                        style="max-height: calc(100vh - 225px)" data-simplebar="init">
+                                        <div class="simplebar-wrapper" style="margin: 0px;">
+                                            <div class="simplebar-height-auto-observer-wrapper">
+                                                <div class="simplebar-height-auto-observer"></div>
+                                            </div>
+                                            <div class="simplebar-mask">
+                                                <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                                    <div class="simplebar-content-wrapper" tabindex="0" role="region"
+                                                        aria-label="scrollable content"
+                                                        style="height: auto; overflow: hidden;">
+                                                        <div class="simplebar-content" style="padding: 0px;">
+                                                            <div class="d-flex mb-1">
+                                                                <div class="flex-shrink-0">
+                                                                    <img src="<%= currentUser.avatar %>"
+                                                                        alt="user-image" class="user-avtar wid-35">
+                                                                </div>
+                                                                <div class="flex-grow-1 ms-3">
+                                                                    <h6 class="mb-1">
+                                                                        <%= currentUser.firstname %>
+                                                                            <%= currentUser.lastname %> 🖐
+                                                                    </h6>
+                                                                    <span>
+                                                                        <%= currentUser.email %>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <hr class="border-secondary border-opacity-50">
+                                                            <p class="text-span">Bağlantılar</p>
+                                                            <a href="/" class="dropdown-item">
+                                                                <span>
+                                                                    <svg class="pc-icon text-muted me-2">
+                                                                        <use xlink:href="#custom-login"></use>
+                                                                    </svg>
+                                                                    <span>Siteye dön</span>
+                                                                </span>
+                                                            </a>
+                                                            <a href="/admin/change-password" class="dropdown-item">
+                                                                <span>
+                                                                    <svg class="pc-icon text-muted me-2">
+                                                                        <use xlink:href="#custom-shopping-bag"></use>
+                                                                    </svg>
+                                                                    <span>Şifre değiştir</span>
+                                                                </span>
+                                                            </a>
+                                                            <hr class="border-secondary border-opacity-50">
+                                                            <div class="d-grid mb-3">
+                                                                <a href="/signout">
+                                                                    <button class="btn btn-primary">
+                                                                        <svg class="pc-icon me-2">
+                                                                            <use xlink:href="#custom-logout-1-outline">
+                                                                            </use>
+                                                                        </svg>Çıkış yap
+                                                                    </button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
+                                        </div>
+                                        <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                            <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+                                        </div>
+                                        <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
+                                            <div class="simplebar-scrollbar" style="height: 0px; display: none;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <!-- [ Header ] end -->

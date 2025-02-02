@@ -1,0 +1,177 @@
+<%- include ('../partials/header') %>
+<div class="pc-container">
+    <div class="pc-content">
+        <!-- [ breadcrumb ] start -->
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                            <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+                            <li class="breadcrumb-item" aria-current="page">Kategoriler</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="page-header-title">
+                            <h2 class="mb-0">Kategoriler</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ breadcrumb ] end -->
+
+        <!-- [ Main Content ] start -->
+        <div class="row">
+            <!-- [ sample-page ] start -->
+            <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="text-end pb-0">
+                        <a data-bs-toggle="modal" data-bs-target="#newCategory" href="#" class="btn btn-primary">
+                            <i class="ti ti-plus f-18"></i> Kategori Oluştur
+                        </a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-de">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Kategori Adı</th>
+                            <th>Eylemler</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        <% allCategory.forEach((category, index) => {%>
+                          <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%=category.name%></td>
+                            <td ><a data-bs-toggle="tooltip" aria-label="Delete"
+                                data-bs-original-title="Ürünü Sil" id="<%=category._id%>" onclick="catchID(this.id);" type="button"><i class="ti ti-trash f-18"></i></a></td>
+                          </tr>
+                        <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- [ sample-page ] end -->
+        </div>
+        <!-- [ Main Content ] end -->
+
+        <div class="modal fade" id="newCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Kategori Oluşturma Penceresi</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form method="post" action="/admin/categories/add">
+                    <div class="form-group">
+                      <label for="name" class="col-form-label">Kategori Adı</label>
+                      <input type="text" class="form-control" name="name" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                      <label for="icon" class="col-form-label">SVG İkon Kodu</label>
+                      <textarea id="iconInput" type="text" class="form-control" name="icon" autocomplete="off"></textarea>
+                    </div>
+                    <div id="iconPreview" style="max-width: 30px;" class="mb-2">
+                    </div>
+                    <div>
+                      <label for="icon" class="col-form-label">İkon Özelleştirme</label>
+                      <input disabled class="form-control" value=' width="24" height="24" viewBox="0 0 600 600" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"'>
+                    </div>
+                    <div class="form-group pt-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                        <button type="submit" class="btn btn-primary">Oluştur</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="notifier-container" id="notifier-container" style="margin-top: 70px !important;"></div>
+
+        <!--[ Notification] start-->
+        <script>
+            'use strict';
+
+            document.addEventListener('DOMContentLoaded', function () {
+                // Sunucudan gelen hata mesajı
+                const errorMessage = "<%= errorMessage ? errorMessage : '' %>";
+                const successMessage = "<%= successMessage ? successMessage : '' %>";
+
+                // Eğer bir hata mesajı varsa, uyarı bildirimi göster
+                if (errorMessage) {
+                    notifier.show(
+                        'Uyarı!',
+                        errorMessage,
+                        'warning',
+                        '/dashboard/assets/images/notification/medium_priority-48.png',
+                        4000
+                    );
+                }
+
+                // Eğer bir başarı mesajı varsa, başarı bildirimi göster
+                if (successMessage) {
+                    notifier.show(
+                        'Başarılı!',
+                        successMessage,
+                        'success',
+                        '/dashboard/assets/images/notification/ok-48.png',
+                        4000
+                    );
+                }
+            });
+        </script>
+        <!--[ Notification] end-->
+
+    </div>
+</div>
+
+
+<!-- İkon önizleme işlemi -->
+<script>
+  const iconInput = document.getElementById('iconInput');
+  const iconPreview = document.getElementById('iconPreview');
+
+  iconInput.addEventListener('input', function() {
+    const svgCode = iconInput.value;
+
+    iconPreview.innerHTML = svgCode;
+  });
+</script>
+<!-- İkon önizleme işlemi sonu -->
+
+
+
+<!-- Kategori silme işlemi -->
+<script>
+    function catchID(clicked_id) {
+        var _id = clicked_id
+
+        if (!_id) {
+            return alert('Bir hata oluştu :( Lütfen sayfayı yenileyin.')
+        }
+
+        var confirmDelete = confirm('Kategoriyi silmek istediğinizden emin misin?');
+
+        if (confirmDelete) {
+            $.post('/admin/categories/delete', { _id }, function (data) {
+                window.location.href = '/admin/categories';
+            });
+        }
+        
+    };
+
+</script>
+<!-- Kategori silme işlem sonu -->
+
+
+<%- include ('../partials/footer') %>

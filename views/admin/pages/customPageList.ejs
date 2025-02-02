@@ -1,0 +1,329 @@
+<%- include ('../partials/header') %>
+    <div class="pc-container">
+        <div class="pc-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+                                <li class="breadcrumb-item" aria-current="page">Sayfalar</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h2 class="mb-0">Sayfalar</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+
+            <!-- [ Main Content ] start -->
+            <div class="row">
+                <!-- [ sample-page ] start -->
+                <div class="col-sm-12">
+                    <div class="card table-card">
+                        <div class="card-body">
+                            <div class="text-end p-4 pb-0">
+                                <a href="/admin/custompage/add" class="btn btn-primary">
+                                    <i class="ti ti-plus f-18"></i> Sayfa Ekle
+                                </a>
+                            </div>
+                            <div class="table-responsive">
+                                <div class="dataTable-wrapper dataTable-loading no-footer searchable fixed-columns">
+                                    <div class="dataTable-top">
+                                        <div class="dataTable-dropdown"><label><select class="dataTable-selector">
+                                                    <option value="5" selected="">5</option>
+                                                    <option value="10">10</option>
+                                                    <option value="15">15</option>
+                                                    <option value="20">20</option>
+                                                    <option value="25">25</option>
+                                                </select> sayfa başına girdi</label></div>
+                                        <div class="dataTable-search"><input class="dataTable-input"
+                                                placeholder="Search..." type="text"></div>
+                                    </div>
+                                    <div class="dataTable-container">
+                                        <table class="table table-hover dataTable-table" id="pc-dt-simple">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-end" style="width: 5%;">#</th>
+                                                    <th style="width: 20%;">Ürün Detayı</th>
+                                                    <th style="width: 58%;">Kategori</th>
+                                                    <th class="text-center" style="width: 17%;">Eylemler</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% foundAllCustomPage.forEach((customPages, index) => {%>
+                                                <tr>
+                                                    <td class="text-end"><%= index + 1 %></td>
+                                                    <td>
+                                                        <div class="row">
+                                                            <div class="col-auto pe-0">
+                                                                <img src="<%= customPages.pageImage %>" style="object-fit: cover;"
+                                                                    alt="user-image" width="40" height="40" class="wid-40 rounded">
+                                                            </div>
+                                                            <div class="col">
+                                                                <h6 class="mb-1"><%= customPages.pageName %></h6>
+                                                                <p class="text-muted f-12 mb-0"><%= customPages.pageLink %> </p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <% if (customPages.customPageMetaKeywords) { 
+                                                            let formattedMetaKeywords = customPages.customPageMetaKeywords
+                                                                .split(',')
+                                                                .map(color => color.trim().charAt(0).toUpperCase() + color.trim().slice(1))
+                                                                .join(', ');
+                                                        %>
+                                                        <% if (customPages.customPageMetaKeywords) { 
+                                                            let formattedMetKeywords = customPages.customPageMetaKeywords
+                                                                .split(',')
+                                                                .map(color => color.trim().charAt(0).toUpperCase() + color.trim().slice(1))
+                                                                .join(', ');
+                                                                if (formattedMetKeywords.length > 200) {
+                                                                    formattedMetKeywords = formattedMetKeywords.substring(0, 70) + '...';
+                                                                }
+                                                        %>
+                                                        <span data-bs-toggle="tooltip" aria-label="View"
+                                                        data-bs-original-title=" <%= formattedMetaKeywords %>">
+                                                            <%= formattedMetKeywords %>
+                                                        </span> 
+                                                        <% }} %>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <ul class="list-inline me-auto mb-0">
+                                                            <li class="list-inline-item align-bottom"
+                                                                data-bs-toggle="tooltip" aria-label="View"
+                                                                data-bs-original-title="Önizleme">
+                                                                <a href="#"
+                                                                    class="avtar avtar-xs btn-link-secondary btn-pc-default"
+                                                                    data-bs-toggle="modal" data-bs-target="#modal_<%= customPages._id %>">
+                                                                    <i class="ti ti-eye f-18"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-inline-item align-bottom"
+                                                                data-bs-toggle="tooltip" aria-label="Edit"
+                                                                data-bs-original-title="Düzenle">
+                                                                <a href="/admin/custompage-edit/<%= customPages._id%>"
+                                                                    class="avtar avtar-xs btn-link-success btn-pc-default">
+                                                                    <i class="ti ti-edit-circle f-18"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-inline-item align-bottom"
+                                                                data-bs-toggle="tooltip" aria-label="Delete"
+                                                                data-bs-original-title="Sayfayı Sil">
+                                                                <a onclick="catchID(this.id);" type="button" id="<%= customPages._id%>"
+                                                                    class="avtar avtar-xs btn-link-danger btn-pc-default">
+                                                                    <i class="ti ti-trash f-18"></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="dataTable-bottom">
+                                        <div class="dataTable-info">Showing 1 to 5 of 24 entries</div>
+                                        <nav class="dataTable-pagination">
+                                            <ul class="dataTable-pagination-list">
+                                                <li class="active"><a href="#" data-page="1">1</a></li>
+                                                <li class=""><a href="#" data-page="2">2</a></li>
+                                                <li class=""><a href="#" data-page="3">3</a></li>
+                                                <li class=""><a href="#" data-page="4">4</a></li>
+                                                <li class=""><a href="#" data-page="5">5</a></li>
+                                                <li class="pager"><a href="#" data-page="2">›</a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- [ sample-page ] end -->
+            </div>
+            <!-- [ Main Content ] end -->
+
+            <div class="notifier-container" id="notifier-container" style="margin-top: 70px !important;"></div>
+
+            <!--[ Notification] start-->
+            <script>
+                'use strict';
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Sunucudan gelen hata mesajı
+                    const errorMessage = "<%= errorMessage ? errorMessage : '' %>";
+                    const successMessage = "<%= successMessage ? successMessage : '' %>";
+
+                    // Eğer bir hata mesajı varsa, uyarı bildirimi göster
+                    if (errorMessage) {
+                        notifier.show(
+                            'Uyarı!',
+                            errorMessage,
+                            'warning',
+                            '/dashboard/assets/images/notification/medium_priority-48.png',
+                            4000
+                        );
+                    }
+
+                    // Eğer bir başarı mesajı varsa, başarı bildirimi göster
+                    if (successMessage) {
+                        notifier.show(
+                            'Başarılı!',
+                            successMessage,
+                            'success',
+                            '/dashboard/assets/images/notification/ok-48.png',
+                            4000
+                        );
+                    }
+                });
+            </script>
+
+        </div>
+    </div>
+    <% foundAllCustomPage.forEach((customPageModal) => {%>
+    <div class="modal fade" id="modal_<%= customPageModal._id %>" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+              <h5 class="mb-0">Sayfa Önizlemesi</h5>
+              <a href="#" class="avtar avtar-s btn-link-danger btn-pc-default" data-bs-dismiss="modal">
+                <i class="ti ti-x f-20"></i>
+              </a>
+            </div>
+            <div class="modal-body">
+              <div class="row align-items-center">
+                <iframe src="/<%= customPageModal.pageLink %>" width="100%" height="400px" style="border: none;"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <% }) %>
+
+    <!-- Ürün kaldırma işlemi -->
+    <script>
+        function catchID(clicked_id) {
+
+            var _id = clicked_id
+
+            if (!_id) {
+                return alert('Bir hata oluştu :( Lütfen sayfayı yenileyin.')
+            }
+
+            var confirmDelete = confirm('Sayfayı silmek istediğinizden emin misin?');
+
+            if (confirmDelete) {
+                $.post('/admin/custompage/delete', { _id }, function (data) {
+                    window.location.href = '/admin/custompage-list';
+                });
+            }
+            
+        };
+
+    </script>
+    <!-- Ürün kaldırma işlem sonu -->
+
+
+    <!-- [ dataTable ] start-->
+    <script>
+        $(document).ready(function () {
+            // DataTable'ı başlat
+            var table = $('#pc-dt-simple').DataTable({
+                "paging": true,
+                "searching": true,
+                "info": false,       // Varsayılan "info" kısmını devre dışı bırakıyoruz.
+                "lengthChange": false,
+                "ordering": false,
+                "dom": 't',          // Sadece tabloyu gösteriyoruz.
+                "pageLength": 5,     // Sayfa başına 5 veri göster.
+                "language": {
+                    "zeroRecords": "Eşleşen sonuç bulunamadı",
+                    "search": "Ara:",
+                    "paginate": {
+                        "first": "İlk",
+                        "last": "Son",
+                        "next": "İleri",
+                        "previous": "Geri"
+                    }
+                }
+            });
+    
+            // Sayfa başına veri değişikliği
+            $('.dataTable-selector').on('change', function () {
+                var newLength = $(this).val();
+                table.page.len(newLength).draw();
+                updatePagination(); // Sayfa numaralarını ve info kısmını güncelle
+            });
+    
+            // Arama kutusu ile arama yapma
+            $('.dataTable-input').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+    
+            // Sayfa değişiklikleri sırasında sayfa numarasını güncelle
+            function updatePagination() {
+                var info = table.page.info();
+                var currentPage = info.page + 1; // Sayfa 1 tabanlı
+                var totalPages = info.pages;
+                var pageInfo = 'Showing ' + info.start + ' to ' + info.end + ' of ' + info.recordsTotal + ' entries';
+                $('.dataTable-info').text(pageInfo); // Bilgi kısmını güncelle
+    
+                var paginationList = $('.dataTable-pagination-list');
+                paginationList.empty(); // Eski sayfa numaralarını temizle
+    
+                // Sayfa numarası düzeni
+                if (totalPages <= 5) {
+                    // 5'ten az sayfa varsa, tüm sayfaları göster
+                    for (var i = 1; i <= totalPages; i++) {
+                        paginationList.append('<li class="' + (currentPage === i ? 'active' : '') + '"><a href="#" data-page="' + i + '">' + i + '</a></li>');
+                    }
+                } else {
+                    // 5'ten fazla sayfa varsa, baş ve son sayfaları göster
+                    if (currentPage > 1) {
+                        paginationList.append('<li><a href="#" data-page="' + (currentPage - 1) + '">‹</a></li>');
+                    }
+    
+                    // Ortadaki sayfalara odaklan
+                    var pageRange = 3;
+                    var startPage = Math.max(1, currentPage - pageRange);
+                    var endPage = Math.min(totalPages, currentPage + pageRange);
+    
+                    for (var i = startPage; i <= endPage; i++) {
+                        paginationList.append('<li class="' + (currentPage === i ? 'active' : '') + '"><a href="#" data-page="' + i + '">' + i + '</a></li>');
+                    }
+    
+                    if (currentPage < totalPages) {
+                        paginationList.append('<li><a href="#" data-page="' + (currentPage + 1) + '">›</a></li>');
+                    }
+                }
+            }
+    
+            // Sayfa numarası tıklama işlemi
+            $(document).on('click', '.dataTable-pagination-list a', function (e) {
+                e.preventDefault();
+                var page = $(this).data('page') - 1; // DataTables sayfa 0 tabanlıdır
+                table.page(page).draw(false);
+                updatePagination(); // Sayfa numarasını ve bilgi kısmını güncelle
+            });
+    
+            // Sayfa değiştikçe sayfa numarasını ve bilgi kısmını güncelle
+            table.on('page', function () {
+                updatePagination(); // Sayfa numarasını ve bilgi kısmını güncelle
+            });
+    
+            // Sayfa ilk yüklendiğinde sayfa numarasını ve info kısmını güncelle
+            updatePagination();
+        });
+    </script>
+    
+    <!-- [ dataTable ] end-->
+
+
+    <%- include ('../partials/footer') %>

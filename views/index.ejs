@@ -1,0 +1,147 @@
+<%- include ('./partials/header') %>
+<head>
+    <title><%= settings.siteName %></title>
+    <meta content="<%= settings.siteDesc %>" name="description" />
+    <meta property="og:image" content="<%= settings.siteLogo %>">
+    <meta name="twitter:card" content="summary_large_image">
+</head>
+<!-- start banner area -->
+<div class="slider-one rn-section-gapTop">
+    <div class="container">
+        <div class="row row-reverce-sm align-items-center">
+            <div class="col-lg-5 col-md-6 col-sm-12 mt_sm--50">
+                <h2 class="title" style="font-weight: bold;" data-sal-delay="200" data-sal="slide-up" data-sal-duration="800"><%= settings.bannerTitle%></h2>
+                <p class="slide-disc" data-sal-delay="300" data-sal="slide-up" data-sal-duration="800"><%= settings.bannerDesc%></p>
+                <% if (settings.bannerButtonVisibility == true) { %>
+                    <div class="button-group">
+                    <% settings.bannerButton.forEach((button) => { %>
+                        <a class="btn btn-large <%= button.buttonTheme ? 'btn-primary' : 'btn-primary-alta' %>" href="<%= button.buttonLink %>" data-sal-delay="400" data-sal="slide-up" data-sal-duration="800">
+                            <%= button.buttonName %>
+                        </a>
+                    <% }) %>
+                    </div>
+                <% } %>
+            </div>
+            <div class="col-lg-5 col-md-6 col-sm-12 offset-lg-1">
+                <div class="slider-thumbnail">
+                    <img src="<%= settings.bannerImage%>" alt="Slider Images">
+                </div>
+            </div>
+        </div>
+        <% if (settings.serviceAreaVisibility == true) { %>
+        <div class="row g-5 mt--100">
+            <% settings.serviceArea.forEach((servArea, index) => { %>
+            <div class="col-xxl-3 col-lg-4 col-md-6 col-sm-12 col-12">
+                <div class="single-odometer banner <%= ['one', 'two', 'three', 'four'][index] %>">
+                    <div class="icon">
+                        <img src="<%= servArea.serviceAreaIcon %>" alt="Shape">
+                    </div>
+                    <h3 class="counter">
+                        <%= servArea.serviceAreaTitle %>
+                    </h3>
+                    <p class="disc"><%= servArea.serviceAreaContent %></p>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+        <% } %>
+    </div>
+</div>
+<!-- End banner area -->
+<!-- keyfeature area -->
+<div class="key-feature-area rn-section-gapTop">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                <h2 class="title">Ürün Kategorileri</h2>
+                <p class="disc pr--20">Tüm ürünlerimiz ve tüm kategorileri incelemek için <a style="color:var(--color-light-body);" href="/urunler">buraya tıklayın.</a></p>
+            </div>
+            <% allCategory.slice(0, 16).forEach((keyfeatureCategory, index) => { %>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-2">
+                <div class="single-key">   
+                    <%- keyfeatureCategory.icon%>
+                    <label><%= keyfeatureCategory.name%></label>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
+<!-- keyfeature area End-->
+<% if (settings.generalInfoVisibility == true) { %>
+<!-- About Market Place Start -->
+<div class="about-market-area rn-section-gapTop">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="about-wrapper text-center">
+                    <h2><%= settings.generalInfoTitle%></h2>
+                    <p class="discription">
+                        <%= settings.generalInfoContent%>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- About Market Place End -->
+<% } %>
+<!-- New items Start -->
+<div class="rn-new-items rn-section-gapTop">
+    <div class="container">
+        <div class="row mb--50 align-items-center">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                <h3 class="title mb--0" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">Birkaç Ürünümüz
+                </h3>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12 mt_mobile--15">
+                <div class="view-more-btn text-start text-sm-end" data-sal-delay="150" data-sal="slide-up"
+                    data-sal-duration="800">
+                    <a class="btn-transparent" href="/urunler">TÜMÜNÜ GÖR<i data-feather="arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="row g-5">
+            <% allProduct.reverse().slice(0, 5).forEach((itempro) => {%>
+            <!-- start single product -->
+            <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800"
+                class="col-5 col-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="product-style-one no-overlay">
+                    <div class="card-thumbnail">
+                        <a href="/urunler/<%= itempro.productLink %>"><img src="<%= itempro.productImage1 %>"
+                                alt="NFT_portfolio" style="aspect-ratio: 1 / 1; object-fit: cover;"></a>
+                    </div>
+                    <a href="/urunler/<%= itempro.productLink %>"><span class="product-name mt-5"><%= itempro.productName %></span></a>
+                    <div class="bid-react-area">
+                        <div class="last-bid">
+                            <% 
+                                let selectedCategory = (Array.isArray(allCategory) && itempro.category) 
+                                    ? allCategory.find(cat => cat._id?.toString() === itempro.category?.toString()) 
+                                    : null;
+                            %>
+                            <%= selectedCategory ? selectedCategory.name : 'Bilinmeyen Kategori' %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end single product -->
+            <% }) %>
+        </div>
+    </div>
+</div>
+<!-- New items End -->
+
+<% if (settings.partnersVisibility == true) { %>
+<div class="footer-top" style="border-bottom: none; margin-top: 50px;">
+    <div class="container">
+        <div class="row">
+            <ul class="nu-brand-area">
+                <% settings.partners.slice(0,8).forEach((part) => { %>
+                <li><img src="<%= part.partnerLogo%>" alt="nuron-brand_nft"></li>
+                <% }) %>
+            </ul>
+        </div>
+    </div>
+</div>
+<% } %>
+<%- include ('./partials/footer') %>

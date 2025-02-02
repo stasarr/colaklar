@@ -1,0 +1,172 @@
+<%- include ('../partials/header') %>
+<div class="login-area rn-section-gapTop">
+    <div class="container">
+        <div class="row g-5">
+            <div class="offset-2 col-lg-4 col-md-6 ml_md--0 ml_sm--0 col-sm-12">
+                <div class="form-wrapper-one registration-area">
+                    <h4>Kayıt olun</h4>
+                    <form method="POST" action="/signup">
+                        <div class="mb-5">
+                            <label for="firstname" class="form-label">Ad</label>
+                            <input type="text"  name="firstname" id="firstname"
+                            placeholder="Adınızı girin" autocomplete="off" required>
+                        </div>
+                        <div class="mb-5">
+                            <label for="lastname" class="form-label">Soyad</label>
+                            <input type="text" name="lastname" id="lastname"
+                            placeholder="Soyadınızı girin" autocomplete="off" required>
+                        </div>
+                        <div class="mb-5">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" name="email" id="email" placeholder="E-posta adresiniz"
+                            autocomplete="off" required>
+                        </div>
+                        <div class="mb-5">
+                            <label for="password" class="form-label">Şifre</label>
+                            <input type="password" name="password" id="password"
+                            autocomplete="off" placeholder="Şifrenizi girin" required>
+                        </div>
+                        <div class="mb-5">
+                            <label for="confirmpassword" class="form-label">Şifre onayla</label>
+                            <input type="password"  name="confirmpassword" id="confirmpassword"
+                            autocomplete="off" placeholder="Şifrenizi onaylayın" required>
+                        </div>
+                        <div class="mb-5 rn-check-box">
+                            <input type="checkbox" class="rn-check-box-input" id="customCheckc1" required>
+                            <label class="rn-check-box-label" for="customCheckc1">Tüm Şartları ve
+                                Koşulları kabul ediyorum</label>
+                        </div>
+                        <% if (typeof errorMessage !== 'undefined') { %>
+                        <div class="mt_sm--30 mt_md--30 d-none d-lg-block mb-5">
+                            <span class="color-warning"><strong><%= errorMessage %></strong></span>
+                        </div>
+                        <% } else if (typeof successMessage !== 'undefined') { %>
+                        <div class="mt_sm--30 mt_md--30 d-none d-lg-block mb-5">
+                            <span class="color-success"><strong><%= successMessage %></strong></span>
+                        </div>
+                        <% } %>
+                        <div class="mb-5 mt-3" style="max-width: 98%;">
+                            <div class="g-recaptcha" style="border:0px !important; transform:scale(0.77);-webkit-transform:scale(0.83);transform-origin:0 0;-webkit-transform-origin:0 0;" data-sitekey="6LcS71YqAAAAAKbThs0TqP2uHGB46noHB57xnM94"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mr--15">Kayıt ol</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12" style="max-height: 230px;">
+                <div class="social-share-media form-wrapper-one">
+                    <h6>Giriş yap!</h6>
+                    <p> Zaten bir hesabınız var mı? Giriş yapın.</p>
+                    <a href="/signin"><button class="another-login"> <img class="small-image" src="assets/images/icons/signin-3.png" alt=""> <span>Oturum aç</span></button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const firstnameInput = document.getElementById('firstname');
+        const lastnameInput = document.getElementById('lastname');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmpassword');
+        const submitButton = document.querySelector('button[type="submit"]');
+
+        // Kullanıcı adı ve email doğrulama regex
+        const nameRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]{2,30}$/;
+        const validEmailDomains = ["gmail.com", "hotmail.com", "yandex.com", "yahoo.com", "outlook.com"];
+
+        // Şifre doğrulama fonksiyonu
+        const isValidPassword = (password) => {
+            return password.length >= 7 && password.length <= 25;
+        };
+
+        // Email doğrulama fonksiyonu
+        const isValidEmail = (email) => {
+            const emailDomain = email.split('@')[1];
+            return validEmailDomains.includes(emailDomain);
+        };
+
+        // Şifre ve şifre onayı eşleşmesi kontrolü
+        const doPasswordsMatch = (password, confirmPassword) => {
+            return password === confirmPassword;
+        };
+
+        // Inputları ve buton durumunu kontrol eden fonksiyon
+        function validateForm() {
+            let isValid = true;
+
+            // Ad kontrolü
+            if (firstnameInput.value && !nameRegex.test(firstnameInput.value)) {
+                isValid = false;
+                setInvalid(firstnameInput);
+            } else {
+                setValid(firstnameInput);
+            }
+
+            // Soyad kontrolü
+            if (lastnameInput.value && !nameRegex.test(lastnameInput.value)) {
+                isValid = false;
+                setInvalid(lastnameInput);
+            } else {
+                setValid(lastnameInput);
+            }
+
+            // Email kontrolü
+            if (emailInput.value && !isValidEmail(emailInput.value)) {
+                isValid = false;
+                setInvalid(emailInput);
+            } else {
+                setValid(emailInput);
+            }
+
+            // Şifre kontrolü
+            if (passwordInput.value && !isValidPassword(passwordInput.value)) {
+                isValid = false;
+                setInvalid(passwordInput);
+            } else {
+                setValid(passwordInput);
+            }
+
+            // Şifre onayı kontrolü
+            if (confirmPasswordInput.value && !doPasswordsMatch(passwordInput.value, confirmPasswordInput.value)) {
+                isValid = false;
+                setInvalid(confirmPasswordInput);
+            } else {
+                setValid(confirmPasswordInput);
+            }
+
+            submitButton.disabled = !isValid;
+
+            // Eğer tüm inputlar geçerliyse, buton etkin, değilse devre dışı
+            if (isValid) {
+                submitButton.setAttribute('type', 'submit');  // Geçerli ise type'ı submit yap
+            } else {
+                submitButton.setAttribute('type', 'button');  // Geçerli değilse type'ı button yap
+            }
+        }
+
+        // Hatalı input stili
+        function setInvalid(inputElement) {
+            inputElement.classList.add('is-invalid');  // Kırmızı çerçeve için CSS sınıfı
+        }
+
+        // Geçerli input stili
+        function setValid(inputElement) {
+            inputElement.classList.remove('is-invalid');  // Kırmızı çerçeveyi kaldır
+        }
+
+        // Inputlarda anlık izleme
+        firstnameInput.addEventListener('input', validateForm);
+        lastnameInput.addEventListener('input', validateForm);
+        emailInput.addEventListener('input', validateForm);
+        passwordInput.addEventListener('input', validateForm);
+        confirmPasswordInput.addEventListener('input', validateForm);
+
+        // Başlangıçta formu kontrol et
+        validateForm();
+    });
+</script>
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<%- include ('../partials/footer') %>

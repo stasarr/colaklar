@@ -1,0 +1,962 @@
+<%- include ('../partials/header') %>
+    <div class="pc-container">
+        <div class="pc-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+                                <li class="breadcrumb-item" aria-current="page">Ürünü Düzenle</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h2 class="mb-0">Ürünü Düzenle</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+
+            <!-- [ Main Content ] start -->
+            <div class="row">
+                <!-- [ sample-page ] start -->
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mt-3 mb-5">
+                                <ul class="nav nav-pills mb-3">
+                                    <li class="nav-item" style="user-select: none; cursor: pointer;">
+                                        <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" role="tab"
+                                            aria-controls="pills-home" aria-selected="true">Genel Bilgiler</a>
+                                    </li>
+                                    <li class="nav-item" style="user-select: none; cursor: pointer;">
+                                        <a class="nav-link" role="tab" aria-controls="pills-home" aria-selected="true"
+                                            id="pills-home-tab" data-bs-toggle="pill" data-target="details-2"
+                                            onclick="scrollToSection(this)">Ürün Detayları</a>
+                                    </li>
+                                    <li class="nav-item" style="user-select: none; cursor: pointer;">
+                                        <a class="nav-link" role="tab" aria-controls="pills-home" aria-selected="true"
+                                            id="pills-home-tab" data-bs-toggle="pill" data-target="details-3"
+                                            onclick="scrollToSection(this)">Teknik Detaylar</a>
+                                    </li>
+                                    <li class="nav-item" style="user-select: none; cursor: pointer;">
+                                        <a class="nav-link" role="tab" aria-controls="pills-home" aria-selected="true"
+                                            id="pills-home-tab" data-bs-toggle="pill" data-target="details-4"
+                                            onclick="scrollToSection(this)">Estetik Detaylar</a>
+                                    </li>
+                                    <li class="nav-item" style="user-select: none; cursor: pointer;">
+                                        <a class="nav-link" role="tab" aria-controls="pills-home" aria-selected="true"
+                                            id="pills-home-tab" data-bs-toggle="pill" data-target="details-5"
+                                            onclick="scrollToSection(this)">Seo Bilgileri</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <form method="POST" action="/admin/product/edit">
+                                <div class="my-3">
+                                    <h3>Genel Bilgiler</h3>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label">Ürün Adı</label>
+                                        <input name="productName" id="productName" type="text" class="form-control"
+                                            placeholder="Ürünün adını girin" value="<%=foundProduct.productName%>">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label">Kategori</label>
+                                        <select class="form-control" data-trigger name="category"
+                                            id="choices-single-default">
+                                            <option value="">Bir kategori seçin</option>
+                                            <% foundAllCategory.forEach((category) => { %>
+                                                <option value="<%= category._id %>" <%= foundProduct.category.toString() === category._id.toString() ? 'selected' : '' %>>
+                                                    <%= category.name %>
+                                                </option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Ürün Açıklaması</label>
+                                    <textarea name="description" type="text" class="form-control"
+                                        placeholder="Ürün açıklaması girin"><%=foundProduct.description%></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label">Stok Durumu</label>
+                                        <select name="stock" class="form-select">
+                                            <option value="true" <%= foundProduct.stock == true ? 'selected' : '' %>>Stokta</option>
+                                            <option value="false" <%= foundProduct.stcck == false ? 'selected' : '' %>>Stokta Değil</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">Satış Durumu</label>
+                                        <select name="saleStatus" class="form-select">
+                                            <option value="true" <%= foundProduct.saleStatus == true ? 'selected' : '' %>>Satışta</option>
+                                            <option value="false" <%= foundProduct.saleStatus == false ? 'selected' : '' %>>Satıştan kaldırıldı</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="form-label">Ürünün Garantisi</label>
+                                        <select name="warrantyPeriod" class="form-select">
+                                            <option <%= foundProduct.warrantyPeriod === undefined ? 'selected' : '' %> disabled>Yıl</option>
+                                            <option value="1" <%= foundProduct.warrantyPeriod === "1" ? 'selected' : '' %>>1</option>
+                                            <option value="2" <%= foundProduct.warrantyPeriod === "2" ? 'selected' : '' %>>2</option>
+                                            <option value="3" <%= foundProduct.warrantyPeriod === "3" ? 'selected' : '' %>>3</option>
+                                            <option value="4" <%= foundProduct.warrantyPeriod === "4" ? 'selected' : '' %>>4</option>
+                                            <option value="5" <%= foundProduct.warrantyPeriod === "5" ? 'selected' : '' %>>5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3 mt-5">
+                                    <h3 id="details-2">Ürün Detayları</h3>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Kullanım Alanı</label>
+                                    <textarea name="usageArea" type="text" class="form-control"
+                                        placeholder="Kullanım alanlarını yazın"><%=foundProduct.usageArea%></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Uygulama Talimatları</label>
+                                    <textarea name="applicationInstructions" type="text" class="form-control"
+                                        placeholder="Kullanım alanlarını yazın"><%=foundProduct.applicationInstructions%></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Ürün Videosu</label>
+                                    <input name="productVideo" type="text" class="form-control"
+                                        placeholder="https://www.youtube.com/embed/asd8fsa9hv9" value="<%=foundProduct.productVideo%>" autocomplete="off">
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-1">
+                                        <label class="form-label">En</label>
+                                        <input name="width" type="text" class="form-control" placeholder="1 m" value="<%=foundProduct.width%>"
+                                            autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="form-label">Boy</label>
+                                        <input name="height" type="text" class="form-control" placeholder="3 m" value="<%=foundProduct.height%>"
+                                            autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="form-label">Kalınlık</label>
+                                        <input name="thickness" type="text" class="form-control" placeholder="15 cm" value="<%=foundProduct.thickness%>"
+                                            autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="form-label">Ağırlık</label>
+                                        <input name="weight" type="text" class="form-control" placeholder="15 lt" value="<%=foundProduct.weight%>"
+                                            autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="form-label">Yoğunluk</label>
+                                        <input name="density" type="text" class="form-control" placeholder="1.2 gr/cm3" value="<%=foundProduct.density%>"
+                                            autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="form-label">Malzeme Türü</label>
+                                        <input name="materialType" type="text" class="form-control"
+                                            placeholder="Malzeme Türü" value="<%=foundProduct.materialType%>" autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label class="form-label">Renk seçenekleri</label>
+                                        <input name="colorOptions" class="form-control" id="choices-text-remove-button"
+                                            type="text" value="<%=foundProduct.colorOptions%>" placeholder="Enter something">
+                                        <small>Renk girin ve enter tuşuna basın</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-1">
+                                        <label class="form-label">Fiyat</label>
+                                        <input name="price" type="text" class="form-control" placeholder="1000 ₺" value="<%=foundProduct.price%>" 
+                                            autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="form-label">İndirim</label>
+                                        <input name="discount" type="text" class="form-control" placeholder="3%" value="<%=foundProduct.discount%>" 
+                                            autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">Ürün Sertifikası</label>
+                                        <input name="productCertificate" type="text" class="form-control"
+                                            placeholder="TSE" value="<%=foundProduct.productCertificate%>" autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label">Sertifika Bağlantısı</label>
+                                        <input name="certificateLink" type="text" class="form-control"
+                                            placeholder="https://sertifika.com/belge.pdf" value="<%=foundProduct.certificateLink%>" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="mb-3 mt-5">
+                                    <h3 id="details-3">Teknik Detaylar</h3>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <label class="form-label">Isı yalıtımı</label>
+                                        <select name="thermalInsulation" class="form-select">
+                                            <option selected disabled>Yalıtım derecesi</option>
+                                            <option value="Yüksek" <%= foundProduct.thermalInsulation === "Yüksek" ? 'selected' : '' %>>Yüksek</option>
+                                            <option value="Orta" <%= foundProduct.thermalInsulation === "Orta" ? 'selected' : '' %>>Orta</option>
+                                            <option value="Düşük" <%= foundProduct.thermalInsulation === "Düşük" ? 'selected' : '' %>>Düşük</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="form-label">Su yalıtımı</label>
+                                        <select name="waterInsulation" class="form-select">
+                                            <option selected disabled>Yalıtım derecesi</option>
+                                            <option value="Yüksek" <%= foundProduct.waterInsulation === "Yüksek" ? 'selected' : '' %>>Yüksek</option>
+                                            <option value="Orta" <%= foundProduct.waterInsulation === "Orta" ? 'selected' : '' %>>Orta</option>
+                                            <option value="Düşük" <%= foundProduct.waterInsulation === "Düşük" ? 'selected' : '' %>>Düşük</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="form-label">Yangın yalıtımı</label>
+                                        <select name="fireInsulation" class="form-select">
+                                            <option selected disabled>Yalıtım derecesi</option>
+                                            <option value="Yüksek" <%= foundProduct.fireInsulation === "Yüksek" ? 'selected' : '' %>>Yüksek</option>
+                                            <option value="Orta" <%= foundProduct.fireInsulation === "Orta" ? 'selected' : '' %>>Orta</option>
+                                            <option value="Düşük" <%= foundProduct.fireInsulation === "Düşük" ? 'selected' : '' %>>Düşük</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3 mt-5">
+                                    <h3 id="details-4">Estetik Detayları</h3>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <label class="form-label">Yüzey dokusu</label>
+                                        <select name="surfaceTexture" class="form-select">
+                                            <option selected disabled>Doku seçin</option>
+                                            <option value="Pürüzlü" <%= foundProduct.surfaceTexture === "Pürüzlü" ? 'selected' : '' %>>Pürüzlü</option>
+                                            <option value="Granüllü" <%= foundProduct.surfaceTexture === "Granüllü" ? 'selected' : '' %>>Granüllü</option>
+                                            <option value="Düz" <%= foundProduct.surfaceTexture === "Düz" ? 'selected' : '' %>>Düz</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="form-label">Parlaklık</label>
+                                        <select name="glossiness" class="form-select">
+                                            <option selected disabled>Parlaklık derecesi</option>
+                                            <option value="Parlak" <%= foundProduct.glossiness === "Parlak" ? 'selected' : '' %>>Parlak</option>
+                                            <option value="Yarı Mat"<%= foundProduct.glossiness === "Yarı Mat" ? 'selected' : '' %>>Yarı Mat</option>
+                                            <option value="Mat"<%= foundProduct.glossiness === "Mat" ? 'selected' : '' %>>Mat</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3 mt-5">
+                                    <h3 id="details-5">Ürün Seo (Meta) Bilgileri</h3>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">Meta Açıklaması</label>
+                                    <textarea name="productMetaDescription" type="text" class="form-control"
+                                        placeholder="Ürün için meta açıklama girin"><%=foundProduct.productMetaDescription%></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label">Meta Anahtar Kelimeler</label>
+                                        <input name="productMetaKeywords" class="form-control"
+                                            id="choices-text-remove-button-2" type="text" value="<%=foundProduct.productMetaKeywords%>" 
+                                            placeholder="Enter something">
+                                        <small>Anahtar kelime yazın ve enter tuşuna basın</small>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label">Ürün Linki</label>
+                                        <input name="productLink" id="productLink" type="text" class="form-control"
+                                            placeholder="tasyunu-sandvic-panel" value="<%=foundProduct.productLink%>"  autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">Görsel ekle</label>
+                                    <div class="UppyInput form"></div>
+                                    <small>3 görsel'e kadar yükleme yapabilirsiniz</small>
+                                    <div class="UppyInput-Progress py-3"></div>
+                                    <ul id="uploadedFilesList" style="background-color: var(--pc-active-background);
+                                    list-style-type: none;
+                                    border-radius: 10px;"></ul>
+                                </div>
+                                <input type="hidden" name="receiptImage" value="" id="receiptImage">
+                                <input type="hidden" name="receiptImage2" value="<%=foundProduct.productImage1%>, <%=foundProduct.productImage2%>, <%=foundProduct.productImage3%>" id="receiptImage2">
+                                <input type="hidden" name="_id" value="<%=foundProduct._id%>" id="_id">
+
+                                <div class="form-group col-md-4" id="imagesGroup">
+                                    <div class="card">
+                                        <div class="card-body user-story-block">
+                                          <div class="horizontal-scroll">
+                                            <a class="card user-story" id="firstImage" style="display:none;" data-lightbox="/dashboard/assets/images/application/img-story-2.jpg">
+                                              <img src="/dashboard/assets/images/application/img-story-2.jpg" class="card-img" height="200" width="150" style="object-fit: cover; object-position: center; max-height: 200px; max-width: 150px;" alt="img">
+                                            </a>
+                                            <a class="card user-story" id="secondImage" style="display:none;" data-lightbox="/dashboard/assets/images/application/img-story-2.jpg">
+                                                <img src="/dashboard/assets/images/application/img-story-2.jpg" class="card-img" height="200" width="150" style="object-fit: cover; object-position: center; max-height: 200px; max-width: 150px;" alt="img">
+                                            </a>
+                                            <a class="card user-story" id="thirdImage" style="display:none;" data-lightbox="/dashboard/assets/images/application/img-story-2.jpg">
+                                                <img src="/dashboard/assets/images/application/img-story-2.jpg" class="card-img" height="200" width="150" style="object-fit: cover; object-position: center; max-height: 200px; max-width: 150px;" alt="img">
+                                            </a>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-end btn-page mb-0 mt-4">
+                                    <a href="/admin/product-list" class="btn btn-outline-secondary">İptal Et</a>
+                                    <button type="submit" class="btn btn-primary">Ürün Bilgilerini Kaydet</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- [ sample-page ] end -->
+            </div>
+            <!-- [ Main Content ] end -->
+
+            <div class="notifier-container" id="notifier-container" style="margin-top: 70px !important;"></div>
+
+            <!--[ Notification] start-->
+            <script>
+                'use strict';
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Sunucudan gelen hata mesajı
+                    const errorMessage = "<%= errorMessage ? errorMessage : '' %>";
+                    const successMessage = "<%= successMessage ? successMessage : '' %>";
+
+                    // Eğer bir hata mesajı varsa, uyarı bildirimi göster
+                    if (errorMessage) {
+                        notifier.show(
+                            'Uyarı!',
+                            errorMessage,
+                            'warning',
+                            '/dashboard/assets/images/notification/medium_priority-48.png',
+                            4000
+                        );
+                    }
+
+                    // Eğer bir başarı mesajı varsa, başarı bildirimi göster
+                    if (successMessage) {
+                        notifier.show(
+                            'Başarılı!',
+                            successMessage,
+                            'success',
+                            '/dashboard/assets/images/notification/ok-48.png',
+                            4000
+                        );
+                    }
+                });
+            </script>
+            <!--[ Notification] end-->
+
+        </div>
+    </div>
+
+
+
+    <!--[ resimleri görütüleme scripti] start-->
+    <script>
+        
+        // Sayfa yüklenme sonrası çalışacak fonksiyon
+        window.addEventListener('load', function() {
+            // Mutasyon gözlemcisi tanımla
+            const receiptImageInput = document.getElementById('receiptImage');
+            const receiptImage2Input = document.getElementById('receiptImage2');
+
+            // Gözlemciyi sadece sayfa yüklenince başlatıyoruz
+            const observer = new MutationObserver(function() {
+                receiptImage2Input.value = receiptImageInput.value; // receiptImage2'yi receiptImage ile güncelle
+            });
+
+            // observer'ı, receiptImage input'undaki value değişikliklerini izlemek üzere başlatıyoruz
+            observer.observe(receiptImageInput, {
+                attributes: true,        // attribute değişikliklerini izle
+                attributeFilter: ['value'] // sadece 'value' attribute'unu izle
+            });
+        });
+        // Resimleri güncelleyen fonksiyon
+        function updateImages() {
+            // receiptImage2 alanındaki değerleri al
+            var receiptImages = document.getElementById('receiptImage2').value;
+
+            // Resim linklerini virgülle ayır
+            var imageLinks = receiptImages.split(',').map(function(link) {
+                return link.trim(); // boşluklardan arındır
+            });
+
+            // Resimleri varsa, her bir linki gösterecek şekilde düzenle
+            if (imageLinks[0]) {
+                document.getElementById('firstImage').style.display = 'block';
+                document.getElementById('firstImage').setAttribute('data-lightbox', imageLinks[0]);
+                document.getElementById('firstImage').querySelector('img').setAttribute('src', imageLinks[0]);
+            } else {
+                document.getElementById('firstImage').style.display = 'none'; // Yoksa gizle
+            }
+
+            if (imageLinks[1]) {
+                document.getElementById('secondImage').style.display = 'block';
+                document.getElementById('secondImage').setAttribute('data-lightbox', imageLinks[1]);
+                document.getElementById('secondImage').querySelector('img').setAttribute('src', imageLinks[1]);
+            } else {
+                document.getElementById('secondImage').style.display = 'none'; // Yoksa gizle
+            }
+
+            if (imageLinks[2]) {
+                document.getElementById('thirdImage').style.display = 'block';
+                document.getElementById('thirdImage').setAttribute('data-lightbox', imageLinks[2]);
+                document.getElementById('thirdImage').querySelector('img').setAttribute('src', imageLinks[2]);
+            } else {
+                document.getElementById('thirdImage').style.display = 'none'; // Yoksa gizle
+            }
+
+            // Eğer resimler yoksa, formu gizle
+            if (!imageLinks[0] && !imageLinks[1] && !imageLinks[2]) {
+                document.getElementById('imagesGroup').style.display = 'none';
+            } else {
+                document.getElementById('imagesGroup').style.display = 'block';
+            }
+        }
+
+        // İlk başta sayfa yüklendiğinde bir kez çalıştır
+        updateImages();
+
+        // receiptImage2 input'undaki değişiklikleri izleyin
+        const receiptImage2Input = document.getElementById('receiptImage2');
+        const observer = new MutationObserver(updateImages);
+
+        // observer'ı receiptImage2 input'u üzerinde value değişikliklerini izlemek için başlat
+        observer.observe(receiptImage2Input, {
+            attributes: true, // sadece attribute değişikliklerini izle
+            attributeFilter: ['value'] // sadece value değişikliklerini izle
+        });
+    </script>
+    <!--[ resimleri görütüleme scripti] end-->
+
+
+    <!-- Ürün linki oluşturma -->
+    <script>
+        document.getElementById('productName').addEventListener('input', function () {
+            const productName = this.value;
+
+            // Türkçe karakterleri İngilizceye çevirme fonksiyonu
+            const turkishToEnglish = (text) => {
+                const charMap = {
+                    'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u',
+                    'Ç': 'C', 'Ğ': 'G', 'İ': 'I', 'Ö': 'O', 'Ş': 'S', 'Ü': 'U'
+                };
+                return text.replace(/[çğıöşüÇĞİÖŞÜ]/g, char => charMap[char] || char);
+            };
+
+            // İşlenmiş linki oluştur
+            const productLink = turkishToEnglish(productName)
+                .toLowerCase()        // Küçük harfe çevir
+                .replace(/\s+/g, '-') // Boşlukları "-" ile değiştir
+                .replace(/[^a-z0-9-]/g, '') // Harf, rakam ve '-' dışındaki karakterleri kaldır
+                .replace(/-+/g, '-'); // Birden fazla "-" karakterini tek "-" yap
+
+            // productLink inputuna yaz
+            document.getElementById('productLink').value = productLink;
+        });
+    </script>
+
+    <!-- Menü Yönlendirme -->
+    <script>
+        function scrollToSection(button) {
+            const targetId = button.getAttribute("data-target");
+            const targetElement = document.getElementById(targetId);
+
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    </script>
+
+
+    <!-- [ Upload ] start-->
+    <script src="/dashboard/assets/js/plugins/uppy.min.js"></script>
+    <script>
+        const Tus = Uppy.Tus;
+        const StatusBar = Uppy.StatusBar;
+        const FileInput = Uppy.FileInput;
+
+        // Function to upload to ImgBB
+        const uploadToImgBB = (file) => {
+            const formData = new FormData();
+            formData.append('image', file);
+
+            return fetch('https://api.imgbb.com/1/upload?key=<%=IMGBB_API_KEY%>', { // API Key burada olacak
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.data && data.data.url) {
+                        return data.data.url;  // İmajın URL'sini döndürecek
+                    } else {
+                        throw new Error('ImgBB API response did not contain a link.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error uploading to ImgBB:', error);
+                });
+        };
+
+        // Function for handling successful image upload
+        const onUploadSuccess = (file) => {
+            console.log('Uploading file:', file);
+            uploadToImgBB(file).then((imgbbUrl) => {
+                // Dosya ImgBB'ye yüklendikten sonra URL'yi `receiptImage` input'una yazdır
+                const receiptImageInput = document.querySelector('#receiptImage');
+
+                // Eğer input boş değilse, mevcut değere virgülle ekle
+                if (receiptImageInput.value) {
+                    receiptImageInput.value += `, ${imgbbUrl}`;
+                } else {
+                    receiptImageInput.value = imgbbUrl;
+                }
+
+                // Ayrıca dosya bağlantısını listeye eklemek istiyorsan:
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = imgbbUrl;
+                a.target = '_blank';
+                a.appendChild(document.createTextNode(file.name));
+                li.appendChild(a);
+                document.querySelector('#uploadedFilesList').appendChild(li);
+            });
+        };
+
+        (function () {
+            const pc_uppy_5 = new Uppy.Core({ debug: true, autoProceed: true });
+
+            pc_uppy_5
+                .use(FileInput, { target: '.UppyInput', pretty: false })
+                .use(Tus, { endpoint: 'https://tusd.tusdemo.net/files/' })
+                .use(StatusBar, {
+                    target: '.UppyInput-Progress',
+                    hideUploadButton: true,
+                    hideAfterFinish: false
+                });
+
+            // Dosya başarıyla yüklendikten sonra ImgBB'ye gönder
+            pc_uppy_5.on('upload-success', (file) => {
+                onUploadSuccess(file.data);
+            });
+
+            // Inputa CSS sınıfı ekleme işlemi
+            document.querySelector('.uppy-FileInput-input').classList.add('form-control');
+        })();
+    </script>
+    <!-- [ Upload ] end-->
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var genericExamples = document.querySelectorAll('[data-trigger]');
+            for (i = 0; i < genericExamples.length; ++i) {
+                var element = genericExamples[i];
+                new Choices(element, {
+                    placeholderValue: 'This is a placeholder set in the config',
+                    searchPlaceholderValue: 'Kategori arayın'
+                });
+            }
+
+            var textRemove = new Choices(document.getElementById('choices-text-remove-button'), {
+                delimiter: ',',
+                editItems: true,
+                maxItemCount: 25,
+                removeItemButton: true
+            });
+
+            var textRemove = new Choices(document.getElementById('choices-text-remove-button-2'), {
+                delimiter: ',',
+                editItems: true,
+                maxItemCount: 25,
+                removeItemButton: true
+            });
+
+            var text_Unique_Val = new Choices('#choices-text-unique-values', {
+                paste: false,
+                duplicateItemsAllowed: false,
+                editItems: true
+            });
+
+            var text_i18n = new Choices('#choices-text-i18n', {
+                paste: false,
+                duplicateItemsAllowed: false,
+                editItems: true,
+                maxItemCount: 5,
+                addItemText: function (value) {
+                    return 'Appuyez sur Entrée pour ajouter <b>"' + String(value) + '"</b>';
+                },
+                maxItemText: function (maxItemCount) {
+                    return String(maxItemCount) + 'valeurs peuvent être ajoutées';
+                },
+                uniqueItemText: 'Cette valeur est déjà présente'
+            });
+
+            var textEmailFilter = new Choices('#choices-text-email-filter', {
+                editItems: true,
+                addItemFilter: function (value) {
+                    if (!value) {
+                        return false;
+                    }
+
+                    const regex =
+                        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    const expression = new RegExp(regex.source, 'i');
+                    return expression.test(value);
+                }
+            }).setValue(['joe@bloggs.com']);
+
+            var textDisabled = new Choices('#choices-text-disabled', {
+                addItems: false,
+                removeItems: false
+            }).disable();
+
+            var textPrependAppendVal = new Choices('#choices-text-prepend-append-value', {
+                prependValue: 'item-',
+                appendValue: '-' + Date.now()
+            }).removeActiveItems();
+
+            var textPresetVal = new Choices('#choices-text-preset-values', {
+                items: [
+                    'Josh Johnson',
+                    {
+                        value: 'joe@bloggs.co.uk',
+                        label: 'Joe Bloggs',
+                        customProperties: {
+                            description: 'Joe Blogg is such a generic name'
+                        }
+                    }
+                ]
+            });
+
+            var multipleDefault = new Choices(document.getElementById('choices-multiple-groups'));
+
+            var multipleFetch = new Choices('#choices-multiple-remote-fetch', {
+                placeholder: true,
+                placeholderValue: 'Pick an Strokes record',
+                maxItemCount: 5
+            }).setChoices(function () {
+                return fetch('https://api.discogs.com/artists/55980/releases?token=QBRmstCkwXEvCjTclCpumbtNwvVkEzGAdELXyRyW')
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        return data.releases.map(function (release) {
+                            return {
+                                value: release.title,
+                                label: release.title
+                            };
+                        });
+                    });
+            });
+
+            var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+                removeItemButton: true
+            });
+
+            /* Use label on event */
+            var choicesSelect = new Choices('#choices-multiple-labels', {
+                removeItemButton: true,
+                choices: [
+                    {
+                        value: 'One',
+                        label: 'Label One'
+                    },
+                    {
+                        value: 'Two',
+                        label: 'Label Two',
+                        disabled: true
+                    },
+                    {
+                        value: 'Three',
+                        label: 'Label Three'
+                    }
+                ]
+            }).setChoices(
+                [
+                    {
+                        value: 'Four',
+                        label: 'Label Four',
+                        disabled: true
+                    },
+                    {
+                        value: 'Five',
+                        label: 'Label Five'
+                    },
+                    {
+                        value: 'Six',
+                        label: 'Label Six',
+                        selected: true
+                    }
+                ],
+                'value',
+                'label',
+                false
+            );
+
+            choicesSelect.passedElement.element.addEventListener('addItem', function (event) {
+                document.getElementById('message').innerHTML =
+                    '<span class="badge bg-light-primary"> You just added "' + event.detail.label + '"</span>';
+            });
+            choicesSelect.passedElement.element.addEventListener('removeItem', function (event) {
+                document.getElementById('message').innerHTML =
+                    '<span class="badge bg-light-danger"> You just removed "' + event.detail.label + '"</span>';
+            });
+
+            var singleFetch = new Choices('#choices-single-remote-fetch', {
+                searchPlaceholderValue: 'Search for an Arctic Monkeys record'
+            })
+                .setChoices(function () {
+                    return fetch('https://api.discogs.com/artists/391170/releases?token=QBRmstCkwXEvCjTclCpumbtNwvVkEzGAdELXyRyW')
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (data) {
+                            return data.releases.map(function (release) {
+                                return {
+                                    label: release.title,
+                                    value: release.title
+                                };
+                            });
+                        });
+                })
+                .then(function (instance) {
+                    instance.setChoiceByValue('Fake Tales Of San Francisco');
+                });
+
+            var singleXhrRemove = new Choices('#choices-single-remove-xhr', {
+                removeItemButton: true,
+                searchPlaceholderValue: "Search for a Smiths' record"
+            }).setChoices(function (callback) {
+                return fetch('https://api.discogs.com/artists/83080/releases?token=QBRmstCkwXEvCjTclCpumbtNwvVkEzGAdELXyRyW')
+                    .then(function (res) {
+                        return res.json();
+                    })
+                    .then(function (data) {
+                        return data.releases.map(function (release) {
+                            return {
+                                label: release.title,
+                                value: release.title
+                            };
+                        });
+                    });
+            });
+
+            var singleNoSearch = new Choices('#choices-single-no-search', {
+                searchEnabled: false,
+                removeItemButton: true,
+                choices: [
+                    {
+                        value: 'One',
+                        label: 'Label One'
+                    },
+                    {
+                        value: 'Two',
+                        label: 'Label Two',
+                        disabled: true
+                    },
+                    {
+                        value: 'Three',
+                        label: 'Label Three'
+                    }
+                ]
+            }).setChoices(
+                [
+                    {
+                        value: 'Four',
+                        label: 'Label Four',
+                        disabled: true
+                    },
+                    {
+                        value: 'Five',
+                        label: 'Label Five'
+                    },
+                    {
+                        value: 'Six',
+                        label: 'Label Six',
+                        selected: true
+                    }
+                ],
+                'value',
+                'label',
+                false
+            );
+
+            var singlePresetOpts = new Choices('#choices-single-preset-options', {
+                placeholder: true
+            }).setChoices(
+                [
+                    {
+                        label: 'Group one',
+                        id: 1,
+                        disabled: false,
+                        choices: [
+                            {
+                                value: 'Child One',
+                                label: 'Child One',
+                                selected: true
+                            },
+                            {
+                                value: 'Child Two',
+                                label: 'Child Two',
+                                disabled: true
+                            },
+                            {
+                                value: 'Child Three',
+                                label: 'Child Three'
+                            }
+                        ]
+                    },
+                    {
+                        label: 'Group two',
+                        id: 2,
+                        disabled: false,
+                        choices: [
+                            {
+                                value: 'Child Four',
+                                label: 'Child Four',
+                                disabled: true
+                            },
+                            {
+                                value: 'Child Five',
+                                label: 'Child Five'
+                            },
+                            {
+                                value: 'Child Six',
+                                label: 'Child Six'
+                            }
+                        ]
+                    }
+                ],
+                'value',
+                'label'
+            );
+
+            var singleSelectedOpt = new Choices('#choices-single-selected-option', {
+                searchFields: ['label', 'value', 'customProperties.description'],
+                choices: [
+                    {
+                        value: 'One',
+                        label: 'Label One',
+                        selected: true
+                    },
+                    {
+                        value: 'Two',
+                        label: 'Label Two',
+                        disabled: true
+                    },
+                    {
+                        value: 'Three',
+                        label: 'Label Three',
+                        customProperties: {
+                            description: 'This option is fantastic'
+                        }
+                    }
+                ]
+            }).setChoiceByValue('Two');
+
+            var customChoicesPropertiesViaDataAttributes = new Choices('#choices-with-custom-props-via-html', {
+                searchFields: ['label', 'value', 'customProperties']
+            });
+
+            var singleNoSorting = new Choices('#choices-single-no-sorting', {
+                shouldSort: false
+            });
+
+            var cities = new Choices(document.getElementById('cities'));
+            var tubeStations = new Choices(document.getElementById('tube-stations')).disable();
+
+            cities.passedElement.element.addEventListener('change', function (e) {
+                if (e.detail.value === 'London') {
+                    tubeStations.enable();
+                } else {
+                    tubeStations.disable();
+                }
+            });
+
+            var customTemplates = new Choices(document.getElementById('choices-single-custom-templates'), {
+                callbackOnCreateTemplates: function (strToEl) {
+                    var classNames = this.config.classNames;
+                    var itemSelectText = this.config.itemSelectText;
+                    return {
+                        item: function (classNames, data) {
+                            return strToEl(
+                                '\
+                                  <div\
+                                  class="' +
+                                String(classNames.item) +
+                                ' ' +
+                                String(data.highlighted ? classNames.highlightedState : classNames.itemSelectable) +
+                                '"\
+                                  data-item\
+                                  data-id="' +
+                                String(data.id) +
+                                '"\
+                                  data-value="' +
+                                String(data.value) +
+                                '"\
+                                  ' +
+                                String(data.active ? 'aria-selected="true"' : '') +
+                                '\
+                                  ' +
+                                String(data.disabled ? 'aria-disabled="true"' : '') +
+                                '\
+                                  >\
+                                  <span style="margin-right:10px;">🎉</span> ' +
+                                String(data.label) +
+                                '\
+                                  </div>\
+                                  '
+                            );
+                        },
+                        choice: function (classNames, data) {
+                            return strToEl(
+                                '\
+                                  <div\
+                                  class="' +
+                                String(classNames.item) +
+                                ' ' +
+                                String(classNames.itemChoice) +
+                                ' ' +
+                                String(data.disabled ? classNames.itemDisabled : classNames.itemSelectable) +
+                                '"\
+                                  data-select-text="' +
+                                String(itemSelectText) +
+                                '"\
+                                  data-choice \
+                                  ' +
+                                String(data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable') +
+                                '\
+                                  data-id="' +
+                                String(data.id) +
+                                '"\
+                                  data-value="' +
+                                String(data.value) +
+                                '"\
+                                  ' +
+                                String(data.groupId > 0 ? 'role="treeitem"' : 'role="option"') +
+                                '\
+                                  >\
+                                  <span style="margin-right:10px;">👉🏽</span> ' +
+                                String(data.label) +
+                                '\
+                                  </div>\
+                                  '
+                            );
+                        }
+                    };
+                }
+            });
+
+            var resetSimple = new Choices(document.getElementById('reset-simple'));
+
+            var resetMultiple = new Choices('#reset-multiple', {
+                removeItemButton: true
+            });
+        });
+    </script>
+    <%- include ('../partials/footer') %>

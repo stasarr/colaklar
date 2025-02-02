@@ -1,0 +1,426 @@
+<%- include ('../partials/header') %>
+    <div class="pc-container">
+        <div class="pc-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+                                <li class="breadcrumb-item" aria-current="page">Sayfa Düzenle</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h2 class="mb-0">Sayfa Düzenle</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+
+            <!-- [ Main Content ] start -->
+            <div class="row">
+                <!-- [ sample-page ] start -->
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mt-3 mb-5">
+                                <ul class="nav nav-pills mb-3">
+                                    <li class="nav-item" style="user-select: none; cursor: pointer;">
+                                        <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" role="tab"
+                                            aria-controls="pills-home" aria-selected="true">Genel Bilgiler</a>
+                                    </li>
+                                    <li class="nav-item" style="user-select: none; cursor: pointer;">
+                                        <a class="nav-link" role="tab" aria-controls="pills-home" aria-selected="true"
+                                            id="pills-home-tab" data-bs-toggle="pill" data-target="details-2"
+                                            onclick="scrollToSection(this)">Ürün Detayları</a>
+                                    </li>
+                                    <li class="nav-item" style="user-select: none; cursor: pointer;">
+                                        <a class="nav-link" role="tab" aria-controls="pills-home" aria-selected="true"
+                                            id="pills-home-tab" data-bs-toggle="pill" data-target="details-3"
+                                            onclick="scrollToSection(this)">Teknik Detaylar</a>
+                                    </li>
+                                    <li class="nav-item" style="user-select: none; cursor: pointer;">
+                                        <a class="nav-link" role="tab" aria-controls="pills-home" aria-selected="true"
+                                            id="pills-home-tab" data-bs-toggle="pill" data-target="details-4"
+                                            onclick="scrollToSection(this)">Estetik Detaylar</a>
+                                    </li>
+                                    <li class="nav-item" style="user-select: none; cursor: pointer;">
+                                        <a class="nav-link" role="tab" aria-controls="pills-home" aria-selected="true"
+                                            id="pills-home-tab" data-bs-toggle="pill" data-target="details-5"
+                                            onclick="scrollToSection(this)">Seo Bilgileri</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <form method="POST" action="/admin/custompage/edit">
+                                <div class="my-3">
+                                    <h3>Genel Bilgiler</h3>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Sayfa Adı</label>
+                                    <input name="pageName" id="pageName" type="text" class="form-control"
+                                        placeholder="Sayfa adını girin" value="<%=foundPage.pageName%>">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Sayfa Açıklaması</label>
+                                    <textarea name="pageDescription" id="pageDescription" type="text" class="form-control"
+                                        placeholder="Sayfa başlığı girin"><%=foundPage.pageDescription%></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Sayfa İçeriği</label>
+                                    <div id="editor" style="height: 300px; border-radius: 7px;"></div>
+                                    <textarea class="form-control" name="pageContent" id="preview" style="height:400px; display: none;"><%-foundPage.pageContent%></textarea>
+                                </div>
+                                <div class="mb-3 mt-5">
+                                    <h3 id="details-5">Ürün Seo (Meta) Bilgileri</h3>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="form-label">Meta Açıklaması</label>
+                                    <textarea name="customPageMetaDescription" id="productMetaDescription" type="text" class="form-control"
+                                        placeholder="Ürün için meta açıklama girin"><%=foundPage.customPageMetaDescription%></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label">Meta Anahtar Kelimeler</label>
+                                        <input name="customPageMetaKeywords" class="form-control"
+                                            id="choices-text-remove-button-2" type="text"  value="<%=foundPage.customPageMetaKeywords%>"
+                                            placeholder="Enter something">
+                                        <small>Anahtar kelime yazın ve enter tuşuna basın</small>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">Sayfa Linki</label>
+                                        <input name="pageLink" id="pageLink" type="text" class="form-control"
+                                            placeholder="hakkimizda" autocomplete="off" value="<%= foundPage.pageLink %>">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="form-label">Menü Görünürlüğü</label>
+                                        <select name="menuVisibility" class="form-select">
+                                            <option value="false" <%= foundPage.menuVisibility == false ? 'selected' : '' %>>Görünmez</option>
+                                            <option value="true" <%= foundPage.menuVisibility == true ? 'selected' : '' %>>Görünür</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">Görsel ekle</label>
+                                    <div class="UppyInput form"></div>
+                                    <small>Yalnızca 1 görsel yükleyebilirsiniz</small>
+                                    <div class="UppyInput-Progress py-3"></div>
+                                    <ul id="uploadedFilesList" style="background-color: var(--pc-active-background);
+                                    list-style-type: none;
+                                    border-radius: 10px;"></ul>
+                                </div>
+                                <input type="hidden" name="receiptImage" value="" id="receiptImage">
+                                <input type="hidden" name="receiptImage2" value="<%=foundPage.pageImage%>" id="receiptImage2">
+                                <input type="hidden" name="_id" value="<%=foundPage._id%>" id="_id">
+
+                                <div class="form-group col-md-4" id="imagesGroup">
+                                    <div class="card">
+                                        <div class="card-body user-story-block">
+                                          <div class="horizontal-scroll">
+                                            <a class="card user-story" id="firstImage" style="display:none;" data-lightbox="/dashboard/assets/images/application/img-story-2.jpg">
+                                              <img src="/dashboard/assets/images/application/img-story-2.jpg" 
+                                              style="object-fit: cover; object-position: center; max-height: 300px; max-width: 300px;"
+                                              class="card-img" height="300" width="300" style="object-fit: cover; object-position: center; max-height: 200px; max-width: 150px;" alt="img">
+                                            </a>
+                                            <a class="card user-story" id="secondImage" style="display:none;" data-lightbox="/dashboard/assets/images/application/img-story-2.jpg">
+                                                <img src="/dashboard/assets/images/application/img-story-2.jpg" class="card-img" height="200" width="150" style="object-fit: cover; object-position: center; max-height: 200px; max-width: 150px;" alt="img">
+                                            </a>
+                                            <a class="card user-story" id="thirdImage" style="display:none;" data-lightbox="/dashboard/assets/images/application/img-story-2.jpg">
+                                                <img src="/dashboard/assets/images/application/img-story-2.jpg" class="card-img" height="200" width="150" style="object-fit: cover; object-position: center; max-height: 200px; max-width: 150px;" alt="img">
+                                            </a>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-end btn-page mb-0 mt-4">
+                                    <a href="/admin/custompage-list" class="btn btn-outline-secondary">İptal Et</a>
+                                    <button type="submit" class="btn btn-primary">Sayfa Bilgilerini Kaydet</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- [ sample-page ] end -->
+            </div>
+            <!-- [ Main Content ] end -->
+
+            <div class="notifier-container" id="notifier-container" style="margin-top: 70px !important;"></div>
+
+            <!--[ Notification] start-->
+            <script>
+                'use strict';
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Sunucudan gelen hata mesajı
+                    const errorMessage = "<%= errorMessage ? errorMessage : '' %>";
+                    const successMessage = "<%= successMessage ? successMessage : '' %>";
+
+                    // Eğer bir hata mesajı varsa, uyarı bildirimi göster
+                    if (errorMessage) {
+                        notifier.show(
+                            'Uyarı!',
+                            errorMessage,
+                            'warning',
+                            '/dashboard/assets/images/notification/medium_priority-48.png',
+                            4000
+                        );
+                    }
+
+                    // Eğer bir başarı mesajı varsa, başarı bildirimi göster
+                    if (successMessage) {
+                        notifier.show(
+                            'Başarılı!',
+                            successMessage,
+                            'success',
+                            '/dashboard/assets/images/notification/ok-48.png',
+                            4000
+                        );
+                    }
+                });
+            </script>
+            <!--[ Notification] end-->
+
+        </div>
+    </div>
+
+<!--[ ace editor scripti] start-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <script>
+        // Initialize Ace editor
+        var editor = ace.edit("editor");
+        editor.setFontSize(16);
+        editor.setTheme("ace/theme/textmate");
+        editor.session.setMode("ace/mode/html");
+        editor.setOption("maxLines", 21);
+        editor.setOption("minLines", 10);
+
+        var pageContent = document.getElementById('preview').value;
+        editor.setValue(pageContent, -1);
+        
+        editor.getSession().on('change', function () {
+        var previewTextarea = document.getElementById('preview');
+        previewTextarea.value = editor.getValue();
+        });
+    </script>
+<!--[ ace editor scripti] end-->
+
+
+
+    <!--[ resimleri görütüleme scripti] start-->
+    <script>
+        
+        // Sayfa yüklenme sonrası çalışacak fonksiyon
+        window.addEventListener('load', function() {
+            // Mutasyon gözlemcisi tanımla
+            const receiptImageInput = document.getElementById('receiptImage');
+            const receiptImage2Input = document.getElementById('receiptImage2');
+
+            // Gözlemciyi sadece sayfa yüklenince başlatıyoruz
+            const observer = new MutationObserver(function() {
+                receiptImage2Input.value = receiptImageInput.value; // receiptImage2'yi receiptImage ile güncelle
+            });
+
+            // observer'ı, receiptImage input'undaki value değişikliklerini izlemek üzere başlatıyoruz
+            observer.observe(receiptImageInput, {
+                attributes: true,        // attribute değişikliklerini izle
+                attributeFilter: ['value'] // sadece 'value' attribute'unu izle
+            });
+        });
+        // Resimleri güncelleyen fonksiyon
+        function updateImages() {
+            // receiptImage2 alanındaki değerleri al
+            var receiptImages = document.getElementById('receiptImage2').value;
+
+            // Resim linklerini virgülle ayır
+            var imageLinks = receiptImages.split(',').map(function(link) {
+                return link.trim(); // boşluklardan arındır
+            });
+
+            // Resimleri varsa, her bir linki gösterecek şekilde düzenle
+            if (imageLinks[0]) {
+                document.getElementById('firstImage').style.display = 'block';
+                document.getElementById('firstImage').setAttribute('data-lightbox', imageLinks[0]);
+                document.getElementById('firstImage').querySelector('img').setAttribute('src', imageLinks[0]);
+            } else {
+                document.getElementById('firstImage').style.display = 'none'; // Yoksa gizle
+            }
+
+            if (imageLinks[1]) {
+                document.getElementById('secondImage').style.display = 'block';
+                document.getElementById('secondImage').setAttribute('data-lightbox', imageLinks[1]);
+                document.getElementById('secondImage').querySelector('img').setAttribute('src', imageLinks[1]);
+            } else {
+                document.getElementById('secondImage').style.display = 'none'; // Yoksa gizle
+            }
+
+            if (imageLinks[2]) {
+                document.getElementById('thirdImage').style.display = 'block';
+                document.getElementById('thirdImage').setAttribute('data-lightbox', imageLinks[2]);
+                document.getElementById('thirdImage').querySelector('img').setAttribute('src', imageLinks[2]);
+            } else {
+                document.getElementById('thirdImage').style.display = 'none'; // Yoksa gizle
+            }
+
+            // Eğer resimler yoksa, formu gizle
+            if (!imageLinks[0] && !imageLinks[1] && !imageLinks[2]) {
+                document.getElementById('imagesGroup').style.display = 'none';
+            } else {
+                document.getElementById('imagesGroup').style.display = 'block';
+            }
+        }
+
+        // İlk başta sayfa yüklendiğinde bir kez çalıştır
+        updateImages();
+
+        // receiptImage2 input'undaki değişiklikleri izleyin
+        const receiptImage2Input = document.getElementById('receiptImage2');
+        const observer = new MutationObserver(updateImages);
+
+        // observer'ı receiptImage2 input'u üzerinde value değişikliklerini izlemek için başlat
+        observer.observe(receiptImage2Input, {
+            attributes: true, // sadece attribute değişikliklerini izle
+            attributeFilter: ['value'] // sadece value değişikliklerini izle
+        });
+    </script>
+    <!--[ resimleri görütüleme scripti] end-->
+
+
+    <!-- Ürün linki oluşturma -->
+    <script>
+        document.getElementById('pageName').addEventListener('input', function () {
+            const productName = this.value;
+
+            // Türkçe karakterleri İngilizceye çevirme fonksiyonu
+            const turkishToEnglish = (text) => {
+                const charMap = {
+                    'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u',
+                    'Ç': 'C', 'Ğ': 'G', 'İ': 'I', 'Ö': 'O', 'Ş': 'S', 'Ü': 'U'
+                };
+                return text.replace(/[çğıöşüÇĞİÖŞÜ]/g, char => charMap[char] || char);
+            };
+
+            // İşlenmiş linki oluştur
+            const productLink = turkishToEnglish(productName)
+                .toLowerCase()        // Küçük harfe çevir
+                .replace(/\s+/g, '-') // Boşlukları "-" ile değiştir
+                .replace(/[^a-z0-9-]/g, '') // Harf, rakam ve '-' dışındaki karakterleri kaldır
+                .replace(/-+/g, '-'); // Birden fazla "-" karakterini tek "-" yap
+
+            // productLink inputuna yaz
+            document.getElementById('pageLink').value = productLink;
+        });
+    </script>
+
+    <!-- Menü Yönlendirme -->
+    <script>
+        function scrollToSection(button) {
+            const targetId = button.getAttribute("data-target");
+            const targetElement = document.getElementById(targetId);
+
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    </script>
+
+
+    <!-- [ Upload ] start-->
+    <script src="/dashboard/assets/js/plugins/uppy.min.js"></script>
+    <script>
+        const Tus = Uppy.Tus;
+        const StatusBar = Uppy.StatusBar;
+        const FileInput = Uppy.FileInput;
+
+        // Function to upload to ImgBB
+        const uploadToImgBB = (file) => {
+            const formData = new FormData();
+            formData.append('image', file);
+
+            return fetch('https://api.imgbb.com/1/upload?key=<%=IMGBB_API_KEY%>', { // API Key burada olacak
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.data && data.data.url) {
+                        return data.data.url;  // İmajın URL'sini döndürecek
+                    } else {
+                        throw new Error('ImgBB API response did not contain a link.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error uploading to ImgBB:', error);
+                });
+        };
+
+        // Function for handling successful image upload
+        const onUploadSuccess = (file) => {
+            console.log('Uploading file:', file);
+            uploadToImgBB(file).then((imgbbUrl) => {
+                // Dosya ImgBB'ye yüklendikten sonra URL'yi `receiptImage` input'una yazdır
+                const receiptImageInput = document.querySelector('#receiptImage');
+
+                receiptImageInput.value = imgbbUrl;
+
+                // Ayrıca dosya bağlantısını listeye eklemek istiyorsan:
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = imgbbUrl;
+                a.target = '_blank';
+                a.appendChild(document.createTextNode(file.name));
+                li.appendChild(a);
+                document.querySelector('#uploadedFilesList').appendChild(li);
+            });
+        };
+
+        (function () {
+            const pc_uppy_5 = new Uppy.Core({ debug: true, autoProceed: true });
+
+            pc_uppy_5
+                .use(FileInput, { target: '.UppyInput', pretty: false })
+                .use(Tus, { endpoint: 'https://tusd.tusdemo.net/files/' })
+                .use(StatusBar, {
+                    target: '.UppyInput-Progress',
+                    hideUploadButton: true,
+                    hideAfterFinish: false
+                });
+
+            // Dosya başarıyla yüklendikten sonra ImgBB'ye gönder
+            pc_uppy_5.on('upload-success', (file) => {
+                onUploadSuccess(file.data);
+            });
+
+            // Inputa CSS sınıfı ekleme işlemi
+            document.querySelector('.uppy-FileInput-input').classList.add('form-control');
+        })();
+    </script>
+    <!-- [ Upload ] end-->
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var textRemove = new Choices(document.getElementById('choices-text-remove-button-2'), {
+                delimiter: ',',
+                editItems: true,
+                maxItemCount: 25,
+                removeItemButton: true
+            });
+
+            var resetSimple = new Choices(document.getElementById('reset-simple'));
+
+            var resetMultiple = new Choices('#reset-multiple', {
+                removeItemButton: true
+            });
+        });
+    </script>
+    <%- include ('../partials/footer') %>

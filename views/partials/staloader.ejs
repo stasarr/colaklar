@@ -1,0 +1,35 @@
+<style>
+    /* Preloader Styles */
+    .preloader {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: #f5f8fa; /* Preloader arkaplan rengi */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999; /* Preloader üstüne diğer öğelerin gelmesini engellemek için yüksek bir z-index kullanın */
+    }
+  
+    .loader {
+        border: 8px solid #f3f3f3; /* Yükleme çubuğunun rengi */
+        border-top: 8px solid #3498db; /* Yükleme çubuğunun yükseldiği renk */
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 2s linear infinite;
+    }
+  
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+  
+  </style>
+  <script>
+    window.addEventListener('load', () => {
+        // Sayfa yüklendiğinde preloader'ı gizle
+        const preloader = document.querySelector('.preloader');
+        preloader.style.display = 'none';
+    });
+  </script>

@@ -1,0 +1,213 @@
+<%- include ('../partials/header') %>
+    <div class="pc-container">
+        <div class="pc-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+                                <li class="breadcrumb-item" aria-current="page">Üye Oluştur</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h2 class="mb-0">Üye Oluştur</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+
+            <!-- [ Main Content ] start -->
+            <div class="row">
+                <!-- [ sample-page ] start -->
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="POST" action="/admin/users/add">
+                                <div class="my-3">
+                                    <h3>Genel Bilgiler</h3>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <label class="form-label">Ad</label>
+                                        <input name="firstname" id="firstname" type="text" class="form-control"
+                                            placeholder="Bir isim girin" required>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="form-label">Soyad</label>
+                                        <input name="lastname" id="lastname" type="text" class="form-control"
+                                            placeholder="Bir soyisim girin" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <label class="form-label">E-posta</label>
+                                        <input name="email" id="email" type="email" class="form-control"
+                                            placeholder="E-posta adresiniz" required autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="form-label">Şifre</label>
+                                        <input name="password" id="password" type="password" class="form-control"
+                                            placeholder="Bir şifre girin" required autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="form-label">Şifreyi Onayla</label>
+                                        <input name="confirmpassword" id="confirmpassword" type="password"
+                                            class="form-control" placeholder="Şifreyi onaylayın" required
+                                            autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-2">
+                                        <label class="form-label">Cinsiyet</label>
+                                        <select name="gender" class="form-select">
+                                            <option value="male">Erkek</option>
+                                            <option value="female">Kadın</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="form-label">Yetki</label>
+                                        <select name="role" class="form-select">
+                                            <option>user</option>
+                                            <option>moderator</option>
+                                            <option>admin</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="btn-page pt-2">
+                                    <button type="submit" class="btn btn-primary">Kullanıcı Oluştur</button>
+                                </div>
+                            </form>
+                            <div class="col-sm-12 pt-5">
+                                <div class="card table-card">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <div
+                                                class="dataTable-wrapper dataTable-loading no-footer searchable fixed-columns">
+                                                <div class="dataTable-container">
+                                                    <table class="table table-hover dataTable-table" id="pc-dt-simple">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-end" style="width: 4.44444%;">#</th>
+                                                                <th style="width: 38.3333%;">Ad Soyad</th>
+                                                                <th style="width: 11.2963%;">Rol</th>
+                                                                <th class="text-center" style="width: 15.463%;">Eylemler
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% foundAllUser.forEach((user, index) => { %>
+                                                            <tr>
+                                                                <td class="text-end"><%= index +1 %></td>
+                                                                <td>
+                                                                    <div class="row">
+                                                                        <div class="col-auto pe-0">
+                                                                            <img src="<%= user.avatar%>"
+                                                                                alt="user-image" class="wid-40 rounded">
+                                                                        </div>
+                                                                        <div class="col">
+                                                                            <h6 class="mb-1"><%= user.firstname%> <%=user.lastname%></h6>
+                                                                            <p class="text-muted f-12 mb-0"><%= user.email%></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td><span class="badge bg-light-success  f-12"><%= user.role%></span> </td>
+                                                                <td class="text-center">
+                                                                    <ul class="list-inline me-auto mb-0">
+                                                                        <% if (currentUser._id != user._id && currentUser.role == "admin" && user.role != "admin") { %>
+                                                                        <li class="list-inline-item align-bottom"
+                                                                            data-bs-toggle="tooltip" aria-label="Delete"
+                                                                            data-bs-original-title="Üyeyi Sil">
+                                                                            <a href="#" id="<%= user._id%>"
+                                                                                class="avtar avtar-xs btn-link-danger btn-pc-default"
+                                                                                type="button" onclick="catchID(this.id);">
+                                                                                <i class="ti ti-trash f-18"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                        <% } %>
+                                                                    </ul>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- [ sample-page ] end -->
+            </div>
+            <!-- [ Main Content ] end -->
+
+            <div class="notifier-container" id="notifier-container" style="margin-top: 70px !important;"></div>
+
+            <!--[ Notification] start-->
+            <script>
+                'use strict';
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Sunucudan gelen hata mesajı
+                    const errorMessage = "<%= errorMessage ? errorMessage : '' %>";
+                    const successMessage = "<%= successMessage ? successMessage : '' %>";
+
+                    // Eğer bir hata mesajı varsa, uyarı bildirimi göster
+                    if (errorMessage) {
+                        notifier.show(
+                            'Uyarı!',
+                            errorMessage,
+                            'warning',
+                            '/dashboard/assets/images/notification/medium_priority-48.png',
+                            4000
+                        );
+                    }
+
+                    // Eğer bir başarı mesajı varsa, başarı bildirimi göster
+                    if (successMessage) {
+                        notifier.show(
+                            'Başarılı!',
+                            successMessage,
+                            'success',
+                            '/dashboard/assets/images/notification/ok-48.png',
+                            4000
+                        );
+                    }
+                });
+            </script>
+            <!--[ Notification] end-->
+
+        </div>
+    </div>
+
+        <!-- [üye silme] start -->
+        <script>
+            function catchID(clicked_id) {
+                var _id = clicked_id
+    
+                if (!_id) {
+                    return alert('Bir hata oluştu :( Lütfen sayfayı yenileyin.')
+                }
+    
+                var confirmDelete = confirm('Üyeyi silmek istediğinizden emin misiniz?');
+
+                if (confirmDelete) {
+                $.post('/admin/users/delete', { _id }, function (data) {
+                    window.location.href = '/admin/users';
+                });
+                }
+            };
+    
+        </script>
+        <!-- [üye silme] end -->
+
+    <%- include ('../partials/footer') %>

@@ -1,0 +1,338 @@
+<head>
+    <title><%= foundProduct.productName %> - Çolaklar Yalıtım</title>
+    <meta property="og:image" content="<%= foundProduct.productImage1 %>">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="keywords" content="<%= foundProduct.productMetaKeywords %>">
+    <meta name="description" content="<%= foundProduct.productMetaDescription %>">
+</head>
+<%- include ('../partials/header') %>
+<style>
+    .pd-property-inner{
+        max-width: 100% !important;
+    }
+</style>
+<div class="product-details-area rn-section-gapTop">
+    <div class="container">
+        <div class="row g-5">
+            <!-- product image area -->
+
+            <div class="col-lg-7 col-md-12 col-sm-12">
+                <div class="product-tab-wrapper rbt-sticky-top-adjust" style="top: 100px;">
+                    <div class="pd-tab-inner">
+                        <div class="nav rn-pd-nav rn-pd-rt-content nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">
+                                <span class="rn-pd-sm-thumbnail">
+                                    <img src="<%= foundProduct.productImage1 %>" style="aspect-ratio: 1 / 1; object-fit: cover;" alt="ikon">
+                                </span>
+                            </button>
+                            <% if(foundProduct.productImage2) { %> 
+                            <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+                                <span class="rn-pd-sm-thumbnail">
+                                    <img src="<%= foundProduct.productImage2 %>" style="aspect-ratio: 1 / 1; object-fit: cover;" alt="ikon">
+                                </span>
+                            </button>
+                            <% } %>
+                            <% if(foundProduct.productImage3) { %> 
+                            <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+                                <span class="rn-pd-sm-thumbnail">
+                                    <img src="<%= foundProduct.productImage3 %>" style="aspect-ratio: 1 / 1; object-fit: cover;" alt="ikon">
+                                </span>
+                            </button>
+                            <% } %>
+                        </div>
+
+                        <div class="tab-content rn-pd-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                <div class="rn-pd-thumbnail">
+                                    <img src="<%= foundProduct.productImage1 %>" style="aspect-ratio: 1 / 1; object-fit: cover;" alt="ikon">
+                                </div>
+                            </div>
+                            <% if(foundProduct.productImage2) { %> 
+                            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                                <div class="rn-pd-thumbnail">
+                                    <img src="<%= foundProduct.productImage2 %>" style="aspect-ratio: 1 / 1; object-fit: cover;" alt="ikon">
+                                </div>
+                            </div>
+                            <% } %>
+                            <% if(foundProduct.productImage2) { %> 
+                            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                                <div class="rn-pd-thumbnail">
+                                    <img src="<%= foundProduct.productImage3 %>" style="aspect-ratio: 1 / 1; object-fit: cover;" alt="ikon">
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- product image area end -->
+
+            <div class="col-lg-5 col-md-12 col-sm-12 mt_md--50 mt_sm--60">
+                <div class="rn-pd-content-area">
+                    <div class="pd-title-area">
+                        <div class="rn-pd-bd-wrapper">
+                            <div class="top-seller-inner-one">
+                                <h6 class="name-title mb-1">
+                                    Ürün Adı
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pd-title-area">
+                        <h4 class="title"><%= foundProduct.productName %></h4>
+                    </div>
+                    <span class="bid">Kategori: <span class="price"><%= productCategory.name %></span></span>
+                    <% if (foundProduct.stock == true) { %>
+                    <% } else { %>
+                    <br><span class="bid"><span class="color-red">Stokta yok</span></span>
+                    <% } %>
+                    <% if (foundProduct.saleStatus == true) { %>
+                    <% } else { %>
+                    <br><span class="bid"><span class="color-red">Satıştan kaldırıldı</span></span>
+                    <% } %>
+
+
+                    <% if (foundProduct.price) { 
+                        let discountRate = foundProduct.discount ? foundProduct.discount : 0; // Eğer discount tanımlı değilse 0 kabul et
+                        let finalPrice = foundProduct.price - (foundProduct.price * discountRate / 100); // İndirimi uygula
+                    %>
+                        <h6 class="title mt--50">
+                            Fiyatlandırma
+                        </h6>
+                        <span class="bid" style="font-size: 18px;">‣ <%= foundProduct.price %>₺ 
+                            <% if (foundProduct.discount) { %>
+                                <span class="color-green" style="font-size: 15px;">↓<%= foundProduct.discount %>% indirim</span>
+                            <% } %>
+                        </span>
+                        <% if (foundProduct.discount) { %>
+                        <br><span id="finalPrice" class="bid" style="font-size: 28px;">‣ <%= finalPrice.toFixed(2) %>₺</span>
+                        <% } %>
+                    <% } %>
+                    
+                    
+                    <h6 class="title mt--50">
+                        Ürün Açıklaması
+                    </h6>
+                    <span class="bid" style="font-size: 16px;"><%= foundProduct.description %></span>
+                    <div class="catagory-collection mt-3">
+                        <div class="collection">
+                            <div class="top-seller-inner-one">
+                                <div class="top-seller-wrapper">
+                                    <div class="thumbnail">
+                                        <a href="#"><img src="https://www.colaklar.com.tr/eskisite/images/logo.png" style="aspect-ratio: 1 / 1; object-fit: cover;" alt="logo"></a>
+                                    </div>
+                                    <div class="top-seller-content">
+                                        <a href="#">
+                                            <h6 class="name">Çolaklar Yalıtım</h6>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="btn btn-primary-alta" href="#">Daha fazla bilgi için iletişime geçin</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="rn-bid-details">
+                <div class="tab-wrapper-one">
+                    <nav class="tab-button-one">
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Ürün Detayları</button>
+                            <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Kullanım Alanı</button>
+                            <button style="min-width: 170px;" class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Uygulama Talimatları</button>
+                        </div>
+                    </nav>
+                    <div class="tab-content rn-bid-content" id="nav-tabContent">
+                        <div class="tab-pane fade" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <!-- single -->
+                            <div class="">
+                                <!-- single -->
+                                <div class="rn-pd-sm-property-wrapper">
+                                    <div class="property-wrapper">
+                                        <!-- single property -->
+                                        <div class="pd-property-inner" style="max-width: 100%; width: 100%;">
+                                            <% if (foundProduct.usageArea) { %>
+                                            <span class="color-white value px-4 pt-3 pb-5" style="font-size:15px; color: var(--color-light-heading) !important;"><%= foundProduct.usageArea %></span>
+                                            <% } else { %>
+                                            <span class="color-white value px-4 pt-3 pb-5" style="font-size:15px; color: var(--color-light-heading) !important;">Bu ürün için kullanım alanı bilgisi girilmemiş.</span>
+                                            <% } %>
+                                        </div>
+                                        <!-- single property End -->
+                                    </div>
+                                </div>
+                                <!-- single -->
+                            </div>
+                            <!-- single -->
+                        </div>
+                        <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <!-- single -->
+                            <div class="">
+                                <!-- single -->
+                                <div class="rn-pd-sm-property-wrapper">
+                                    <div class="catagory-wrapper">
+                                        <!-- single property -->
+                                        <% if (foundProduct.weight) { %>
+                                        <div class="pd-property-inner">
+                                            <span class="color-body type">Ağırlık</span>
+                                            <span class="color-white value"><%= foundProduct.weight %></span>
+                                        </div>
+                                        <% } %>
+                                        <!-- single property End -->
+                                        <!-- single property -->
+                                        <% if (foundProduct.width && foundProduct.height) { %>
+                                        <div class="pd-property-inner">
+                                            <span class="color-body type">En Boy Oranı</span>
+                                            <span class="color-white value"><%= foundProduct.width %> x <%= foundProduct.height %></span>
+                                        </div>
+                                        <% } %>
+                                        <!-- single property End -->
+                                        <!-- single property -->
+                                        <% if (foundProduct.thickness) { %>
+                                        <div class="pd-property-inner">
+                                            <span class="color-body type">Kalınlık</span>
+                                            <span class="color-white value"><%= foundProduct.thickness %></span>
+                                        </div>
+                                        <% } %>
+                                        <!-- single property End -->
+                                        <!-- single property -->
+                                        <% if (foundProduct.density) { %>
+                                        <div class="pd-property-inner">
+                                            <span class="color-body type">Yoğunluk</span>
+                                            <span class="color-white value"><%= foundProduct.density %></span>
+                                        </div>
+                                        <% } %>
+                                        <!-- single property End -->
+                                        <!-- single property -->
+                                        <% if (foundProduct.materialType) { %>
+                                        <div class="pd-property-inner">
+                                            <span class="color-body type">Malzeme Türü</span>
+                                            <span class="color-white value"><%= foundProduct.materialType %></span>
+                                        </div>
+                                        <% } %>
+                                        <!-- single property End -->
+                                        <!-- single property -->
+                                        <% if (foundProduct.colorOptions) { 
+                                            let formattedColors = foundProduct.colorOptions
+                                                .split(',')
+                                                .map(color => color.trim().charAt(0).toUpperCase() + color.trim().slice(1))
+                                                .join(', ');
+                                        %>
+                                            <div class="pd-property-inner">
+                                                <span class="color-body type">Renk Seçenekleri</span>
+                                                <span class="color-white value"><%= formattedColors %></span>
+                                            </div>
+                                        <% } %>
+                                        <!-- single property End -->
+                                        <!-- single property -->
+                                        <% if (foundProduct.warrantyPeriod) { %>
+                                        <div class="pd-property-inner">
+                                            <span class="color-body type">Garanti Süresi</span>
+                                            <span class="color-white value"><%= foundProduct.warrantyPeriod %></span>
+                                        </div>
+                                        <% } %>
+                                        <!-- single property End -->
+                                        <!-- single property -->
+                                        <% if (foundProduct.thermalInsulation) { %>
+                                        <div class="pd-property-inner">
+                                            <span class="color-body type">Isı Yalıtımı</span>
+                                            <span class="color-white value"><%= foundProduct.thermalInsulation %></span>
+                                        </div>
+                                        <% } %>
+                                        <!-- single property End -->
+                                        <!-- single property -->
+                                        <% if (foundProduct.waterInsulation) { %>
+                                        <div class="pd-property-inner">
+                                            <span class="color-body type">Su Yalıtımı</span>
+                                            <span class="color-white value"><%= foundProduct.waterInsulation %></span>
+                                        </div>
+                                        <% } %>
+                                        <!-- single property End -->
+                                        <!-- single property -->
+                                        <% if (foundProduct.fireInsulation) { %>
+                                        <div class="pd-property-inner">
+                                            <span class="color-body type">Yangın Yalıtımı</span>
+                                            <span class="color-white value"><%= foundProduct.fireInsulation %></span>
+                                        </div>
+                                        <% } %>
+                                        <!-- single property End -->
+                                        <!-- single property -->
+                                        <% if (foundProduct.surfaceTexture) { %>
+                                        <div class="pd-property-inner">
+                                            <span class="color-body type">Malzeme Dokusu</span>
+                                            <span class="color-white value"><%= foundProduct.surfaceTexture %></span>
+                                        </div>
+                                        <% } %>
+                                        <!-- single property End -->
+                                        <!-- single property -->
+                                        <% if (foundProduct.glossiness) { %>
+                                        <div class="pd-property-inner">
+                                            <span class="color-body type">Parlaklık</span>
+                                            <span class="color-white value"><%= foundProduct.glossiness %></span>
+                                        </div>
+                                        <% } %>
+                                        <!-- single property End -->
+                                    </div>
+                                </div>
+                                <!-- single -->
+                            </div>
+                            <!-- single -->
+                        </div>
+                        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                            <!-- single -->
+                            <div class="">
+                                <!-- single -->
+                                <div class="rn-pd-sm-property-wrapper">
+                                    <div class="property-wrapper">
+                                        <!-- single property -->
+                                        <div class="pd-property-inner" style="max-width: 100%; width: 100%;">
+                                            <% if (foundProduct.applicationInstructions) { %>
+                                            <span class="color-white value px-4 pt-3 pb-5" style="font-size:15px; color: var(--color-light-heading) !important;"><%= foundProduct.applicationInstructions %></span>
+                                            <% } else { %>
+                                            <span class="color-white value px-4 pt-3 pb-5" style="font-size:15px; color: var(--color-light-heading) !important;">Bu ürün için uygulama talimatları bilgisi girilmemiş.</span>
+                                            <% } %>
+                                        </div>
+                                        <!-- single property End -->
+                                    </div>
+                                </div>
+                                <!-- single -->
+                            </div>
+                            <!-- single -->
+                        </div>
+                    </div>
+                </div>
+                <% if (foundProduct.productCertificate) { %>
+                <div class="place-bet-area">
+                    <div class="rn-bet-create" style="transform: translateX(0);">
+                        <div class="bid-list winning-bid">
+                            <h6 class="title">Ürün Sertifikası</h6>
+                            <div class="top-seller-inner-one">
+                                <div class="top-seller-wrapper">
+                                    <div class="thumbnail" style="max-width: 135px; border-radius: 0px; border: 0px;">
+                                        <a style="border-radius: 0px; border: none;"><img src="/assets/images/icons/certificate-1.png" style="border-radius: 0px; border: none;" alt="ikon"></a>
+                                    </div>
+                                    <div class="top-seller-content">
+                                        <span class="heighest-bid" style="font-size: 24px;"><a>Sertifika Adı:</a> <%= foundProduct.productCertificate %></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <a class="btn btn-primary-alta mt--30" href="#">Place a Bid</a> -->
+                    <a class="btn btn-primary-alta mt--30" href="<%= foundProduct.certificateLink %>" target="_blank">Sertifikayı Görüntüle</a>
+                </div>
+                <% } %>
+                <% if (foundProduct.productVideo) { %>
+                <div class="py-2"></div>
+                <div class="place-bet-area">
+                    <iframe width="702" height="395" src="<%= foundProduct.productVideo %>" title="Embed videos and playlists" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include ('../partials/footer') %>

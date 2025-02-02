@@ -1,0 +1,302 @@
+<%- include ('../partials/header') %>
+    <!-- [ Main Content ] start -->
+    <div class="pc-container">
+        <div class="pc-content">
+            <!-- [ Main Content ] start -->
+            <div class="row">
+                <div class="col-span-12">
+                    <div class="card welcome-banner" style="background-color: rgb(47 99 255);">
+                        <div class="absolute opacity-50 inset-0 z-10 bg-right-bottom bg-[length:100%] bg-no-repeat"
+                            style="
+                      background-image: url(dashboard/assets/images/widget/img-dropbox-bg.svg);
+                      z-index: 10;
+                      inset: 0;
+                      position: absolute;
+                      background-size: 100%;
+                      background-position: right bottom;
+                      background-repeat: no-repeat;
+                      opacity: 0.5;
+                      border-radius: 12px;
+                      "></div>
+                        <div class="row g-0" style="z-index: 20;">
+                            <div class="col-md-8">
+                                <div class="card-body d-flex align-items-flex-start justify-content-center h-100"
+                                    style="flex-direction: column; text-align: left;">
+                                    <h2 class="card-title text-white">Merhaba, <%=currentUser.firstname%>!</h2>
+                                    <p class="card-text text-white my-2">Buradan ürünlerini en iyi şekilde takip
+                                        edebilir ve kolayca yönetebilirsin.
+                                        İhtiyacın olan her şey elinin altında, kontrol tamamen sende! İyi çalışmalar
+                                        dileriz, her zaman buradayız!</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                <img src="dashboard/assets/images/widget/welcome-banner.png" class="img-fluid rounded-start"
+                                    alt="...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xxl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="avtar avtar-s bg-light-primary">
+                                        <svg class="pc-icon">
+                                            <use xlink:href="#custom-box-1"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0">Ürünler</h6>
+                                </div>
+                            </div>
+                            <div class="bg-body p-3 mt-3 rounded">
+                                <div class="mt-3 row align-items-center">
+                                    <div class="col-5">
+                                        <h2 class="mb-1"><%= foundAllProduct.length %></h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xxl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="avtar avtar-s bg-light-success">
+                                        <svg class="pc-icon">
+                                            <use xlink:href="#custom-shopping-bag"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0">Satıştaki ürün</h6>
+                                </div>
+                            </div>
+                            <div class="bg-body p-3 mt-3 rounded">
+                                <div class="mt-3 row align-items-center">
+                                    <div class="col-5">
+                                        <h2 class="mb-1"><%= foundAllProduct.filter(product => product.saleStatus).length %></h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xxl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="avtar avtar-s bg-light-warning">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M21 7V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V7C3 4 4.5 2 8 2H16C19.5 2 21 4 21 7Z"
+                                                stroke="#E58A00" stroke-width="1.5" stroke-miterlimit="10"
+                                                stroke-linecap="round" stroke-linejoin="round"></path>
+                                            <path opacity="0.6" d="M14.5 4.5V6.5C14.5 7.6 15.4 8.5 16.5 8.5H18.5"
+                                                stroke="#E58A00" stroke-width="1.5" stroke-miterlimit="10"
+                                                stroke-linecap="round" stroke-linejoin="round"></path>
+                                            <path opacity="0.6" d="M8 13H12" stroke="#E58A00" stroke-width="1.5"
+                                                stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round">
+                                            </path>
+                                            <path opacity="0.6" d="M8 17H16" stroke="#E58A00" stroke-width="1.5"
+                                                stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0">Sayfalar</h6>
+                                </div>
+                            </div>
+                            <div class="bg-body p-3 mt-3 rounded">
+                                <div class="mt-3 row align-items-center">
+                                    <div class="col-5">
+                                        <h2 class="mb-1"><%= foundAllCustomPage.length %></h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xxl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="avtar avtar-s bg-light-warning">
+                                        <svg class="pc-icon">
+                                            <use xlink:href="#custom-user-square"></use>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0">Toplam ziyaret</h6>
+                                </div>
+                            </div>
+                            <% 
+                                let totalViews = foundAllCustomPage.reduce((sum, page) => sum + (page.views || 0), 0); 
+                            %>
+                            <div class="bg-body p-3 mt-3 rounded">
+                                <div class="mt-3 row align-items-center">
+                                    <div class="col-5">
+                                        <h2 class="mb-1"><%= totalViews %></h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Sayfalar</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <p class="mb-2">Sitenizde <%= foundAllCustomPage.length %> özel sayfa mevcut</p>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <% foundAllCustomPage.slice(0, 5).forEach((allcustom)=> { %>
+                                <a class="btn btn-link-secondary">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <span class="p-1 d-block bg-success rounded-circle">
+                                                <span class="visually-hidden">New alerts</span>
+                                            </span>
+                                        </div>
+                                        <div class="flex-grow-1 mx-2">
+                                            <p class="mb-0 d-grid text-start">
+                                                <span class="text-truncate w-100"><%= allcustom.pageName %></span>
+                                            </p>
+                                        </div>
+                                        <div class="badge bg-light-secondary f-12"><i class="ti ti-eye text-sm"></i> <%= allcustom.views %>
+                                        </div>
+                                    </div>
+                                </a>
+                                <% }) %>
+                            </div>
+                            <div class="d-grid mt-5">
+                                <a href="/admin/custompage-list" class="btn btn-primary d-flex align-items-center justify-content-center"><i
+                                        class="ti ti-receipt" style="padding-right: 7px;"></i> Sayfaları yönet</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body border-bottom pb-0">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="mb-0">Ürünler</h5>
+                            </div>
+                            <ul class="nav nav-tabs analytics-tab" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="analytics-tab-1" data-bs-toggle="tab"
+                                        data-bs-target="#analytics-tab-1-pane" type="button" role="tab"
+                                        aria-controls="analytics-tab-1-pane" aria-selected="true">Satışta</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="analytics-tab-2" data-bs-toggle="tab"
+                                        data-bs-target="#analytics-tab-2-pane" type="button" role="tab"
+                                        aria-controls="analytics-tab-2-pane" aria-selected="false"
+                                        tabindex="-1">Satıştan kaldırıldı</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="analytics-tab-1-pane" role="tabpanel"
+                                aria-labelledby="analytics-tab-1" tabindex="0">
+                                <ul class="list-group list-group-flush">
+                                    <% foundAllProduct.slice(0, 4).forEach((allpro) => {%>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border"> <%= allpro.productName.slice(0, 2) %> </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0"><%= allpro.productName %></h6>
+                                                        <p class="text-muted mb-0"><small>#<%= allpro._id %></small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <% if (allpro.price > 0) {%>
+                                                        <h6 class="mb-1"><%= allpro.price %>₺</h6>
+                                                        <% } else { %>
+                                                        <h6 class="mb-1">Belirlenmedi</h6>
+                                                        <% } %>
+                                                        <% if (allpro.discount > 0) {%>
+                                                        <p class="text-success mb-0"><i class="ti ti-discount-2"></i>
+                                                            <%= allpro.discount %>% indirim
+                                                        </p>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <% }) %>
+                                </ul>
+                            </div>
+                            <div class="tab-pane fade" id="analytics-tab-2-pane" role="tabpanel"
+                                aria-labelledby="analytics-tab-2" tabindex="0">
+                                <ul class="list-group list-group-flush">
+                                    <% foundAllProduct.filter(allpro => allpro.saleStatus != true).slice(0, 4).forEach((allpro) => {%>
+                                    <li class="list-group-item">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avtar avtar-s border bg-red-100"> <%= allpro.productName.slice(0, 2) %> </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="row g-1">
+                                                    <div class="col-6">
+                                                        <h6 class="mb-0"><%= allpro.productName %></h6>
+                                                        <p class="text-muted mb-0"><small>#<%= allpro._id %></small></p>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        <% if (allpro.price > 0) {%>
+                                                        <h6 class="mb-1"><%= allpro.price %>₺</h6>
+                                                        <% } else { %>
+                                                        <h6 class="mb-1">Belirlenmedi</h6>
+                                                        <% } %>
+                                                        <% if (allpro.discount > 0) {%>
+                                                        <p class="text-danger mb-0"><i class="ti ti-discount-2"></i>
+                                                            <%= allpro.discount %>% indirim
+                                                        </p>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <% }) %>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <div class="d-grid">
+                                        <a href="/admin/product-list" class="btn btn-outline-secondary d-grid"><span
+                                                class="text-truncate w-100">Tüm ürünleri görüntüle</span></a>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-grid">
+                                        <a href="/admin/product-add" class="btn btn-primary d-grid"><span class="text-truncate w-100">Yeni ürün oluştur</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ Main Content ] end -->
+        </div>
+    </div>
+    <%- include ('../partials/footer') %>
