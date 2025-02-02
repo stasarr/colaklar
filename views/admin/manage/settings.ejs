@@ -1,4 +1,27 @@
 <style>
+    .scroll-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background-color: #4fa1f8;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 24px;
+        display: none; /* Başlangıçta gizli olacak */
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .scroll-to-top:hover {
+        background-color: #4688cf;
+    }
+
     .partner-box {
         position: relative;
         display: inline-block;
@@ -124,22 +147,22 @@
                                     <li class="nav-item" style="user-select: none; cursor: pointer;">
                                         <a class="nav-link" role="tab" aria-controls="pills-home" aria-selected="true"
                                             id="pills-home-tab" data-bs-toggle="pill" data-target="details-2"
-                                            onclick="scrollToSection(this)">Ürün Detayları</a>
+                                            onclick="scrollToSection(this)">Sosyal Bağlantılar</a>
                                     </li>
                                     <li class="nav-item" style="user-select: none; cursor: pointer;">
                                         <a class="nav-link" role="tab" aria-controls="pills-home" aria-selected="true"
                                             id="pills-home-tab" data-bs-toggle="pill" data-target="details-3"
-                                            onclick="scrollToSection(this)">Teknik Detaylar</a>
+                                            onclick="scrollToSection(this)">Anasayfa Ayarları</a>
                                     </li>
                                     <li class="nav-item" style="user-select: none; cursor: pointer;">
                                         <a class="nav-link" role="tab" aria-controls="pills-home" aria-selected="true"
                                             id="pills-home-tab" data-bs-toggle="pill" data-target="details-4"
-                                            onclick="scrollToSection(this)">Estetik Detaylar</a>
+                                            onclick="scrollToSection(this)">İşbirlikleri</a>
                                     </li>
                                     <li class="nav-item" style="user-select: none; cursor: pointer;">
                                         <a class="nav-link" role="tab" aria-controls="pills-home" aria-selected="true"
                                             id="pills-home-tab" data-bs-toggle="pill" data-target="details-5"
-                                            onclick="scrollToSection(this)">Seo Bilgileri</a>
+                                            onclick="scrollToSection(this)">Footer Ayarları</a>
                                     </li>
                                 </ul>
                             </div>
@@ -246,7 +269,7 @@
                             </form>
                             <hr class="mt-5">
                             <div class="mb-3 mt-5">
-                                <h3 id="details-2">Anasayfa Ayarları</h3>
+                                <h3 id="details-3">Anasayfa Ayarları</h3>
                             </div>
                             <form method="POST" action="/admin/settings/banner">
                                 <div class="form-group">
@@ -446,7 +469,7 @@
                                 
                             </form>
                             <div class="mb-3 mt-5">
-                                <h3 id="details-2">İşbirlikleri</h3>
+                                <h3 id="details-4">İşbirlikleri</h3>
                             </div>
                             <div class="pb-3 col-md-4">
                                 <div class="form-check form-switch custom-switch-v1 mb-2">
@@ -469,7 +492,7 @@
                                     </div>
                             </div>
                             <div class="mb-3 mt-5">
-                                <h3 id="details-2">Footer Ayarları</h3>
+                                <h3 id="details-5">Footer Ayarları</h3>
                             </div>
                             <form method="post" action="/admin/settings/footerEdit">
                                 <div class="form-group">
@@ -720,6 +743,10 @@
             </div>
             <!-- [ Edit Service Modal ] end -->
             <% }) %>
+
+            <button id="scrollToTopBtn" class="scroll-to-top">
+                ⬆
+            </button>            
 
             <div class="notifier-container" id="notifier-container" style="margin-top: 70px !important;"></div>
 
@@ -1156,6 +1183,29 @@
     });
     </script>
     <!-- [ partner ] end-->
+
+
+
+
+    <!-- [ scroll to top ] start-->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+        
+            window.addEventListener("scroll", function() {
+                if (window.scrollY > 300) {
+                    scrollToTopBtn.style.display = "flex"; // Butonu göster
+                } else {
+                    scrollToTopBtn.style.display = "none"; // Butonu gizle
+                }
+            });
+        
+            scrollToTopBtn.addEventListener("click", function() {
+                window.scrollTo({ top: 0, behavior: "smooth" }); // Sayfanın en üstüne kaydır
+            });
+        });
+    </script>
+    <!-- [ scroll to top ] end-->
 
 
 

@@ -1,18 +1,18 @@
 <%- include ('../partials/header') %>
 <div class="login-area rn-section-gapTop">
     <div class="container">
-        <div class="row g-5">
-            <div class=" offset-2 col-lg-4 col-md-6 ml_md--0 ml_sm--0 col-sm-12">
+        <div class="row g-5 justify-content-center">
+            <div class="col-lg-4">
                 <div class="form-wrapper-one">
                     <h4>Giriş yapın</h4>
                     <form method="POST" action="/signin">
                         <div class="mb-5">
                             <label for="exampleInputEmail1" class="form-label">Email</label>
-                            <input type="email" name="email" id="floatingInput" placeholder="E-posta">
+                            <input type="email" name="email" id="floatingInput" placeholder="E-posta" required>
                         </div>
                         <div class="mb-5">
                             <label for="exampleInputPassword1" class="form-label">Şifre</label>
-                            <input type="password" name="password" id="floatingInput1" placeholder="Şifre">
+                            <input type="password" name="password" id="floatingInput1" placeholder="Şifre" required>
                         </div>
                         <!-- <div class="mb-5 rn-check-box">
                             <input type="checkbox" class="rn-check-box-input" id="exampleCheck1">
@@ -31,13 +31,13 @@
                     </form>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-6 col-sm-12"  style="max-height: 230px;">
+            <!-- <div class="col-lg-4 col-md-6 col-sm-12"  style="max-height: 230px;">
                 <div class="social-share-media form-wrapper-one">
                     <h6>Kayıt olun!</h6>
                     <p> Henüz bir hesabınız yok mu? Hemen kaydolun.</p>
                     <a  href="/signup"><button class="another-login"> <img class="small-image" src="assets/images/icons/signup-2.png" alt=""> <span>Hesap oluştur</span></button></a>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
