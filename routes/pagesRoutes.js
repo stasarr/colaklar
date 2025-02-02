@@ -12,4 +12,8 @@ router.get('/', async (req, res) => {
     res.render('index', {allCategory: allCategory});
 });
 
+router.get('/error', async (req, res) => {
+    res.render('pages/error');
+});
+
 module.exports = router;

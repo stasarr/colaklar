@@ -11,7 +11,7 @@ router.get('/:link', async (req, res) => {
     try {
         let foundPage = await CustomPage.findOne({ pageLink: req.params.link });
         if (!foundPage) {
-            return res.redirect('/404');
+            return res.render('pages/404');
         }
         foundPage.views = (foundPage.views || 0) + 1;
         await foundPage.save();

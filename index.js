@@ -108,21 +108,9 @@ app.use(pages);
 
 
 // 404 Yönlendirmesi
-// app.use((req, res, next) => {
-//     res.status(404).render('404');
-// });
-
-// Ayraç
-// app.use((err, req, res, next) => {
-//     console.error(err.stack);
-//     const referer = req.get('Referer');
-//     if (referer) {
-//         res.redirect(referer);
-//     } else {
-//         res.status(500).render('error');
-//     }
-// });
-
+app.use((req, res, next) => {
+    res.status(404).render('pages/404');
+});
 
 
 
@@ -291,6 +279,28 @@ setTimeout(() => {
 
 
 
+// [ Hata Ayıklama ] - Başı
+process.on('unhandledRejection', (reason, promise) => {
+    console.log(`✯ |=== [AntiCrash] | [unhandledRejection] | [start] ====| ✯`);
+    console.log(reason);
+    console.log('✯ |=== [AntiCrash] | [unhandledRejection] | [end] ===| ✯');
+});
+process.on('rejectionHandled', (promise) => {
+    console.log('✯ |=== [AntiCrash] | [rejectionHandled] | [start] ===| ✯');
+    console.log(promise);
+    console.log('✯ |=== [AntiCrash] | [rejectionHandled] | [end] ===| ✯');
+})
+process.on("uncaughtException", (err, origin) => {
+    console.log('✯ |=== [AntiCrash] | [uncaughtException] | [start] ===| ✯');
+    console.log(err);
+    console.log('✯ |=== [AntiCrash] | [uncaughtException] | [end] ===| ✯');
+});
+process.on('uncaughtExceptionMonitor', (err, origin) => {
+    console.log('✯ |=== [AntiCrash] | [uncaughtExceptionMonitor] | [start] ===| ✯');
+    console.log(err);
+    console.log('✯ |=== [AntiCrash] | [uncaughtExceptionMonitor] | [end] ===| ✯');
+});
+// [ Hata Ayıklama ] - Sonu
 
 
 

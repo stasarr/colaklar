@@ -1,0 +1,23 @@
+<head>
+    <title> 404 - <%=settings.siteName%></title>
+    <meta content="Tüh! Bir şeyler ters gitti. Aradığınızı bulamadık!" name="description" />
+    <meta property="og:image" content="/assets/images/error.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="keywords" content="hata,error,404,not found,bulunamadı">
+</head>
+<%- include ('../partials/header') %>
+<div class="rn-not-found-area rn-section-gapTop">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="rn-not-found-wrapper" style="background: #bebec157;">
+                    <h2 class="large-title">404</h2>
+                    <h3 class="title">Sayfa bulunamadı!</h3>
+                    <p>Aradığınız sayfa ulaşılabilir değil!</p>
+                    <a href="/" class="btn btn-primary btn-large">Anasayfaya Geri Dön</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include ('../partials/footer') %>
