@@ -1,4 +1,61 @@
 <%- include ('../partials/header') %>
+    <style>
+        .upload-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .image-preview {
+            position: relative;
+            display: inline-block;
+            width: 120px;
+            height: 120px;
+            overflow: hidden;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px dashed #ccc;
+            margin: 10px;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        #upload-area {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #aaa;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        #upload-area.hidden {
+            display: none;
+        }
+
+        #image-list {
+            display: flex;
+        }
+    </style>
     <div class="pc-container">
         <div class="pc-content">
             <!-- [ breadcrumb ] start -->
@@ -71,11 +128,13 @@
                                         <select class="form-control" data-trigger name="category"
                                             id="choices-single-default">
                                             <option value="">Bir kategori seçin</option>
-                                            <% foundAllCategory.forEach((category) => { %>
-                                                <option value="<%= category._id %>" <%= foundProduct.category.toString() === category._id.toString() ? 'selected' : '' %>>
+                                            <% foundAllCategory.forEach((category)=> { %>
+                                                <option value="<%= category._id %>"
+                                                    <%=foundProduct.category.toString()===category._id.toString()
+                                                    ? 'selected' : '' %>>
                                                     <%= category.name %>
                                                 </option>
-                                            <% }) %>
+                                                <% }) %>
                                         </select>
                                     </div>
                                 </div>
@@ -88,28 +147,49 @@
                                     <div class="form-group col-md-6">
                                         <label class="form-label">Stok Durumu</label>
                                         <select name="stock" class="form-select">
-                                            <option value="true" <%= foundProduct.stock == true ? 'selected' : '' %>>Stokta</option>
-                                            <option value="false" <%= foundProduct.stcck == false ? 'selected' : '' %>>Stokta Değil</option>
+                                            <option value="true" <%=foundProduct.stock==true ? 'selected' : '' %>>Stokta
+                                            </option>
+                                            <option value="false" <%=foundProduct.stcck==false ? 'selected' : '' %>
+                                                >Stokta Değil</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label class="form-label">Satış Durumu</label>
                                         <select name="saleStatus" class="form-select">
-                                            <option value="true" <%= foundProduct.saleStatus == true ? 'selected' : '' %>>Satışta</option>
-                                            <option value="false" <%= foundProduct.saleStatus == false ? 'selected' : '' %>>Satıştan kaldırıldı</option>
+                                            <option value="true" <%=foundProduct.saleStatus==true ? 'selected' : '' %>
+                                                >Satışta</option>
+                                            <option value="false" <%=foundProduct.saleStatus==false ? 'selected' : '' %>
+                                                >Satıştan kaldırıldı</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label class="form-label">Ürünün Garantisi</label>
                                         <select name="warrantyPeriod" class="form-select">
-                                            <option <%= foundProduct.warrantyPeriod === undefined ? 'selected' : '' %> disabled>Yıl</option>
-                                            <option value="1" <%= foundProduct.warrantyPeriod === "1" ? 'selected' : '' %>>1</option>
-                                            <option value="2" <%= foundProduct.warrantyPeriod === "2" ? 'selected' : '' %>>2</option>
-                                            <option value="3" <%= foundProduct.warrantyPeriod === "3" ? 'selected' : '' %>>3</option>
-                                            <option value="4" <%= foundProduct.warrantyPeriod === "4" ? 'selected' : '' %>>4</option>
-                                            <option value="5" <%= foundProduct.warrantyPeriod === "5" ? 'selected' : '' %>>5</option>
+                                            <option <%=foundProduct.warrantyPeriod===undefined ? 'selected' : '' %>
+                                                disabled>Yıl</option>
+                                            <option value="1" <%=foundProduct.warrantyPeriod==="1" ? 'selected' : '' %>
+                                                >1</option>
+                                            <option value="2" <%=foundProduct.warrantyPeriod==="2" ? 'selected' : '' %>
+                                                >2</option>
+                                            <option value="3" <%=foundProduct.warrantyPeriod==="3" ? 'selected' : '' %>
+                                                >3</option>
+                                            <option value="4" <%=foundProduct.warrantyPeriod==="4" ? 'selected' : '' %>
+                                                >4</option>
+                                            <option value="5" <%=foundProduct.warrantyPeriod==="5" ? 'selected' : '' %>
+                                                >5</option>
                                         </select>
                                     </div>
+                                </div>
+                                <div class="mb-3 mt-5">
+                                    <h3 id="details-6">Ürün Görselleri</h3>
+                                </div>
+                                <input type="hidden" name="_id" value="<%=foundProduct._id%>">
+                                <div class="row">
+                                    <input type="hidden" class="form-control mt-5" style="height: 100px;" name="receiptImage"
+                                        id="receiptImage" required>
+                                    <input type="file" id="file-input" hidden>
+                                    <div  id="image-list" style="display:none;"></div>
+                                    <div id="upload-area">+</div>
                                 </div>
                                 <div class="mb-3 mt-5">
                                     <h3 id="details-2">Ürün Detayları</h3>
@@ -127,66 +207,71 @@
                                 <div class="form-group">
                                     <label class="form-label">Ürün Videosu</label>
                                     <input name="productVideo" type="text" class="form-control"
-                                        placeholder="https://www.youtube.com/embed/asd8fsa9hv9" value="<%=foundProduct.productVideo%>" autocomplete="off">
+                                        placeholder="https://www.youtube.com/embed/asd8fsa9hv9"
+                                        value="<%=foundProduct.productVideo%>" autocomplete="off">
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-1">
                                         <label class="form-label">En</label>
-                                        <input name="width" type="text" class="form-control" placeholder="1 m" value="<%=foundProduct.width%>"
-                                            autocomplete="off">
+                                        <input name="width" type="text" class="form-control" placeholder="1 m"
+                                            value="<%=foundProduct.width%>" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-1">
                                         <label class="form-label">Boy</label>
-                                        <input name="height" type="text" class="form-control" placeholder="3 m" value="<%=foundProduct.height%>"
-                                            autocomplete="off">
+                                        <input name="height" type="text" class="form-control" placeholder="3 m"
+                                            value="<%=foundProduct.height%>" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-1">
                                         <label class="form-label">Kalınlık</label>
-                                        <input name="thickness" type="text" class="form-control" placeholder="15 cm" value="<%=foundProduct.thickness%>"
-                                            autocomplete="off">
+                                        <input name="thickness" type="text" class="form-control" placeholder="15 cm"
+                                            value="<%=foundProduct.thickness%>" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-1">
                                         <label class="form-label">Ağırlık</label>
-                                        <input name="weight" type="text" class="form-control" placeholder="15 lt" value="<%=foundProduct.weight%>"
-                                            autocomplete="off">
+                                        <input name="weight" type="text" class="form-control" placeholder="15 lt"
+                                            value="<%=foundProduct.weight%>" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-1">
                                         <label class="form-label">Yoğunluk</label>
-                                        <input name="density" type="text" class="form-control" placeholder="1.2 gr/cm3" value="<%=foundProduct.density%>"
-                                            autocomplete="off">
+                                        <input name="density" type="text" class="form-control" placeholder="1.2 gr/cm3"
+                                            value="<%=foundProduct.density%>" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label class="form-label">Malzeme Türü</label>
                                         <input name="materialType" type="text" class="form-control"
-                                            placeholder="Malzeme Türü" value="<%=foundProduct.materialType%>" autocomplete="off">
+                                            placeholder="Malzeme Türü" value="<%=foundProduct.materialType%>"
+                                            autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-5">
                                         <label class="form-label">Renk seçenekleri</label>
                                         <input name="colorOptions" class="form-control" id="choices-text-remove-button"
-                                            type="text" value="<%=foundProduct.colorOptions%>" placeholder="Enter something">
+                                            type="text" value="<%=foundProduct.colorOptions%>"
+                                            placeholder="Enter something">
                                         <small>Renk girin ve enter tuşuna basın</small>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-1">
                                         <label class="form-label">Fiyat</label>
-                                        <input name="price" type="text" class="form-control" placeholder="1000 ₺" value="<%=foundProduct.price%>" 
-                                            autocomplete="off">
+                                        <input name="price" type="text" class="form-control" placeholder="1000 ₺"
+                                            value="<%=foundProduct.price%>" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-1">
                                         <label class="form-label">İndirim</label>
-                                        <input name="discount" type="text" class="form-control" placeholder="3%" value="<%=foundProduct.discount%>" 
-                                            autocomplete="off">
+                                        <input name="discount" type="text" class="form-control" placeholder="3%"
+                                            value="<%=foundProduct.discount%>" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label class="form-label">Ürün Sertifikası</label>
                                         <input name="productCertificate" type="text" class="form-control"
-                                            placeholder="TSE" value="<%=foundProduct.productCertificate%>" autocomplete="off">
+                                            placeholder="TSE" value="<%=foundProduct.productCertificate%>"
+                                            autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-label">Sertifika Bağlantısı</label>
                                         <input name="certificateLink" type="text" class="form-control"
-                                            placeholder="https://sertifika.com/belge.pdf" value="<%=foundProduct.certificateLink%>" autocomplete="off">
+                                            placeholder="https://sertifika.com/belge.pdf"
+                                            value="<%=foundProduct.certificateLink%>" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="mb-3 mt-5">
@@ -197,27 +282,36 @@
                                         <label class="form-label">Isı yalıtımı</label>
                                         <select name="thermalInsulation" class="form-select">
                                             <option selected disabled>Yalıtım derecesi</option>
-                                            <option value="Yüksek" <%= foundProduct.thermalInsulation === "Yüksek" ? 'selected' : '' %>>Yüksek</option>
-                                            <option value="Orta" <%= foundProduct.thermalInsulation === "Orta" ? 'selected' : '' %>>Orta</option>
-                                            <option value="Düşük" <%= foundProduct.thermalInsulation === "Düşük" ? 'selected' : '' %>>Düşük</option>
+                                            <option value="Yüksek" <%=foundProduct.thermalInsulation==="Yüksek"
+                                                ? 'selected' : '' %>>Yüksek</option>
+                                            <option value="Orta" <%=foundProduct.thermalInsulation==="Orta" ? 'selected'
+                                                : '' %>>Orta</option>
+                                            <option value="Düşük" <%=foundProduct.thermalInsulation==="Düşük"
+                                                ? 'selected' : '' %>>Düşük</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="form-label">Su yalıtımı</label>
                                         <select name="waterInsulation" class="form-select">
                                             <option selected disabled>Yalıtım derecesi</option>
-                                            <option value="Yüksek" <%= foundProduct.waterInsulation === "Yüksek" ? 'selected' : '' %>>Yüksek</option>
-                                            <option value="Orta" <%= foundProduct.waterInsulation === "Orta" ? 'selected' : '' %>>Orta</option>
-                                            <option value="Düşük" <%= foundProduct.waterInsulation === "Düşük" ? 'selected' : '' %>>Düşük</option>
+                                            <option value="Yüksek" <%=foundProduct.waterInsulation==="Yüksek"
+                                                ? 'selected' : '' %>>Yüksek</option>
+                                            <option value="Orta" <%=foundProduct.waterInsulation==="Orta" ? 'selected'
+                                                : '' %>>Orta</option>
+                                            <option value="Düşük" <%=foundProduct.waterInsulation==="Düşük" ? 'selected'
+                                                : '' %>>Düşük</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="form-label">Yangın yalıtımı</label>
                                         <select name="fireInsulation" class="form-select">
                                             <option selected disabled>Yalıtım derecesi</option>
-                                            <option value="Yüksek" <%= foundProduct.fireInsulation === "Yüksek" ? 'selected' : '' %>>Yüksek</option>
-                                            <option value="Orta" <%= foundProduct.fireInsulation === "Orta" ? 'selected' : '' %>>Orta</option>
-                                            <option value="Düşük" <%= foundProduct.fireInsulation === "Düşük" ? 'selected' : '' %>>Düşük</option>
+                                            <option value="Yüksek" <%=foundProduct.fireInsulation==="Yüksek"
+                                                ? 'selected' : '' %>>Yüksek</option>
+                                            <option value="Orta" <%=foundProduct.fireInsulation==="Orta" ? 'selected'
+                                                : '' %>>Orta</option>
+                                            <option value="Düşük" <%=foundProduct.fireInsulation==="Düşük" ? 'selected'
+                                                : '' %>>Düşük</option>
                                         </select>
                                     </div>
                                 </div>
@@ -229,18 +323,24 @@
                                         <label class="form-label">Yüzey dokusu</label>
                                         <select name="surfaceTexture" class="form-select">
                                             <option selected disabled>Doku seçin</option>
-                                            <option value="Pürüzlü" <%= foundProduct.surfaceTexture === "Pürüzlü" ? 'selected' : '' %>>Pürüzlü</option>
-                                            <option value="Granüllü" <%= foundProduct.surfaceTexture === "Granüllü" ? 'selected' : '' %>>Granüllü</option>
-                                            <option value="Düz" <%= foundProduct.surfaceTexture === "Düz" ? 'selected' : '' %>>Düz</option>
+                                            <option value="Pürüzlü" <%=foundProduct.surfaceTexture==="Pürüzlü"
+                                                ? 'selected' : '' %>>Pürüzlü</option>
+                                            <option value="Granüllü" <%=foundProduct.surfaceTexture==="Granüllü"
+                                                ? 'selected' : '' %>>Granüllü</option>
+                                            <option value="Düz" <%=foundProduct.surfaceTexture==="Düz" ? 'selected' : ''
+                                                %>>Düz</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="form-label">Parlaklık</label>
                                         <select name="glossiness" class="form-select">
                                             <option selected disabled>Parlaklık derecesi</option>
-                                            <option value="Parlak" <%= foundProduct.glossiness === "Parlak" ? 'selected' : '' %>>Parlak</option>
-                                            <option value="Yarı Mat"<%= foundProduct.glossiness === "Yarı Mat" ? 'selected' : '' %>>Yarı Mat</option>
-                                            <option value="Mat"<%= foundProduct.glossiness === "Mat" ? 'selected' : '' %>>Mat</option>
+                                            <option value="Parlak" <%=foundProduct.glossiness==="Parlak" ? 'selected'
+                                                : '' %>>Parlak</option>
+                                            <option value="Yarı mat" <%=foundProduct.glossiness==="Yarı mat"
+                                                ? 'selected' : '' %>>Yarı mat</option>
+                                            <option value="Mat" <%=foundProduct.glossiness==="Mat" ? 'selected' : '' %>
+                                                >Mat</option>
                                         </select>
                                     </div>
                                 </div>
@@ -248,54 +348,22 @@
                                     <h3 id="details-5">Ürün Seo (Meta) Bilgileri</h3>
                                 </div>
                                 <div class="form-group col-md-6">
+                                    <label class="form-label">Ürün Linki</label>
+                                    <input name="productLink" id="productLink" type="text" class="form-control"
+                                        placeholder="tasyunu-sandvic-panel" value="<%=foundProduct.productLink%>"
+                                        autocomplete="off">
+                                </div>
+                                <div class="form-group col-md-6">
                                     <label class="form-label">Meta Açıklaması</label>
                                     <textarea name="productMetaDescription" type="text" class="form-control"
                                         placeholder="Ürün için meta açıklama girin"><%=foundProduct.productMetaDescription%></textarea>
                                 </div>
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label">Meta Anahtar Kelimeler</label>
-                                        <input name="productMetaKeywords" class="form-control"
-                                            id="choices-text-remove-button-2" type="text" value="<%=foundProduct.productMetaKeywords%>" 
-                                            placeholder="Enter something">
-                                        <small>Anahtar kelime yazın ve enter tuşuna basın</small>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label">Ürün Linki</label>
-                                        <input name="productLink" id="productLink" type="text" class="form-control"
-                                            placeholder="tasyunu-sandvic-panel" value="<%=foundProduct.productLink%>"  autocomplete="off">
-                                    </div>
-                                </div>
-
                                 <div class="form-group col-md-6">
-                                    <label class="form-label">Görsel ekle</label>
-                                    <div class="UppyInput form"></div>
-                                    <small>3 görsel'e kadar yükleme yapabilirsiniz</small>
-                                    <div class="UppyInput-Progress py-3"></div>
-                                    <ul id="uploadedFilesList" style="background-color: var(--pc-active-background);
-                                    list-style-type: none;
-                                    border-radius: 10px;"></ul>
-                                </div>
-                                <input type="hidden" name="receiptImage" value="" id="receiptImage">
-                                <input type="hidden" name="receiptImage2" value="<%=foundProduct.productImage1%>, <%=foundProduct.productImage2%>, <%=foundProduct.productImage3%>" id="receiptImage2">
-                                <input type="hidden" name="_id" value="<%=foundProduct._id%>" id="_id">
-
-                                <div class="form-group col-md-4" id="imagesGroup">
-                                    <div class="card">
-                                        <div class="card-body user-story-block">
-                                          <div class="horizontal-scroll">
-                                            <a class="card user-story" id="firstImage" style="display:none;" data-lightbox="/dashboard/assets/images/application/img-story-2.jpg">
-                                              <img src="/dashboard/assets/images/application/img-story-2.jpg" class="card-img" height="200" width="150" style="object-fit: cover; object-position: center; max-height: 200px; max-width: 150px;" alt="img">
-                                            </a>
-                                            <a class="card user-story" id="secondImage" style="display:none;" data-lightbox="/dashboard/assets/images/application/img-story-2.jpg">
-                                                <img src="/dashboard/assets/images/application/img-story-2.jpg" class="card-img" height="200" width="150" style="object-fit: cover; object-position: center; max-height: 200px; max-width: 150px;" alt="img">
-                                            </a>
-                                            <a class="card user-story" id="thirdImage" style="display:none;" data-lightbox="/dashboard/assets/images/application/img-story-2.jpg">
-                                                <img src="/dashboard/assets/images/application/img-story-2.jpg" class="card-img" height="200" width="150" style="object-fit: cover; object-position: center; max-height: 200px; max-width: 150px;" alt="img">
-                                            </a>
-                                          </div>
-                                        </div>
-                                    </div>
+                                    <label class="form-label">Meta Anahtar Kelimeler</label>
+                                    <input name="productMetaKeywords" class="form-control"
+                                        id="choices-text-remove-button-2" type="text"
+                                        value="<%=foundProduct.productMetaKeywords%>" placeholder="Enter something">
+                                    <small>Anahtar kelime yazın ve enter tuşuna basın</small>
                                 </div>
                                 <div class="text-end btn-page mb-0 mt-4">
                                     <a href="/admin/product-list" class="btn btn-outline-secondary">İptal Et</a>
@@ -349,9 +417,104 @@
     </div>
 
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const uploadArea = document.getElementById("upload-area");
+        const imageList = document.getElementById("image-list");
+        const fileInput = document.getElementById("file-input");
+        const receiptImageInput = document.getElementById("receiptImage");
+
+        let uploadedImages = [];
+
+        // Mevcut resimleri sayfa yüklenirken ekle
+        const existingImages = [
+            "<%=foundProduct.productImage1%>",
+            "<%=foundProduct.productImage2%>",
+            "<%=foundProduct.productImage3%>"
+        ].filter(url => url && url !== "undefined");
+
+        existingImages.forEach(url => {
+            addImageToList(url, false);
+        });
+
+        function addImageToList(imageUrl, isNew = true) {
+            if (uploadedImages.length >= 3) return;
+
+            uploadedImages.push(imageUrl);
+
+            const imageWrapper = document.createElement("div");
+            imageWrapper.classList.add("image-preview");
+            imageWrapper.classList.add("col-md-2");
+
+            const image = document.createElement("img");
+            image.src = imageUrl;
+
+            const removeBtn = document.createElement("button");
+            removeBtn.innerHTML = "x";
+            removeBtn.classList.add("remove-btn");
+
+            removeBtn.addEventListener("click", function () {
+                uploadedImages = uploadedImages.filter(img => img !== imageUrl);
+                imageWrapper.remove();
+                updateReceiptImageInput();
+                checkUploadLimit();
+            });
+
+            imageWrapper.appendChild(image);
+            imageWrapper.appendChild(removeBtn);
+            imageList.insertAdjacentElement("beforebegin", imageWrapper);
+
+            updateReceiptImageInput();
+            checkUploadLimit();
+        }
+
+        function updateReceiptImageInput() {
+            receiptImageInput.value = uploadedImages.join(",");
+        }
+
+        function checkUploadLimit() {
+            if (uploadedImages.length >= 3) {
+                uploadArea.classList.add("hidden");
+            } else {
+                uploadArea.classList.remove("hidden");
+            }
+        }
+
+        uploadArea.addEventListener("click", function () {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                uploadToImgbb(file);
+            }
+        });
+
+        function uploadToImgbb(file) {
+            const formData = new FormData();
+            formData.append("image", file);
+
+            fetch("https://api.imgbb.com/1/upload?key=<%=IMGBB_API_KEY%>", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addImageToList(data.data.url);
+                } else {
+                    alert("Resim yüklenirken hata oluştu!");
+                }
+            })
+            .catch(error => console.error("Yükleme hatası:", error));
+        }
+    });
+    </script>
+
 
     <!--[ resimleri görütüleme scripti] start-->
-    <script>
+    <!-- <script>
         
         // Sayfa yüklenme sonrası çalışacak fonksiyon
         window.addEventListener('load', function() {
@@ -425,7 +588,7 @@
             attributes: true, // sadece attribute değişikliklerini izle
             attributeFilter: ['value'] // sadece value değişikliklerini izle
         });
-    </script>
+    </script> -->
     <!--[ resimleri görütüleme scripti] end-->
 
 
@@ -469,7 +632,7 @@
 
 
     <!-- [ Upload ] start-->
-    <script src="/dashboard/assets/js/plugins/uppy.min.js"></script>
+    <!-- <script src="/dashboard/assets/js/plugins/uppy.min.js"></script>
     <script>
         const Tus = Uppy.Tus;
         const StatusBar = Uppy.StatusBar;
@@ -547,7 +710,7 @@
             // Inputa CSS sınıfı ekleme işlemi
             document.querySelector('.uppy-FileInput-input').classList.add('form-control');
         })();
-    </script>
+    </script> -->
     <!-- [ Upload ] end-->
 
 

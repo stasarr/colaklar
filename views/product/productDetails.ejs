@@ -322,7 +322,9 @@
                         </div>
                     </div>
                     <!-- <a class="btn btn-primary-alta mt--30" href="#">Place a Bid</a> -->
+                    <% if (foundProduct.certificateLink) { %>
                     <a class="btn btn-primary-alta mt--30" href="<%= foundProduct.certificateLink %>" target="_blank">Sertifikayı Görüntüle</a>
+                    <% } %>
                 </div>
                 <% } %>
                 <% if (foundProduct.productVideo) { %>

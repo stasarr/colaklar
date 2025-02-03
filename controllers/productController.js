@@ -44,7 +44,7 @@ async function productAdd(req, res, next) {
     }
 
 
-    const receiptImages = receiptImage ? receiptImage.split(', ') : [];
+    const receiptImages = receiptImage ? receiptImage.split(',') : [];
 
     const productImage1 = receiptImages[0]
     const productImage2 = receiptImages[1]
@@ -100,9 +100,6 @@ async function productEdit(req, res, next) {
       req.session.errorMessage = 'Ürün linkini boş bırakamazsınız';
       return res.redirect(`/admin/product-edit/${_id}`);
     }
-    if (!receiptImage || receiptImage == null || receiptImage == undefined || receiptImage == "") {
-      receiptImage = receiptImage2;
-    }
 
 
     const checkProductLink = await Product.findOne({ productLink: productLink });
@@ -115,7 +112,7 @@ async function productEdit(req, res, next) {
     }
 
 
-    const receiptImages = receiptImage ? receiptImage.split(', ') : [];
+    const receiptImages = receiptImage ? receiptImage.split(',') : [];
 
     const productImage1 = receiptImages[0]
     const productImage2 = receiptImages[1]
