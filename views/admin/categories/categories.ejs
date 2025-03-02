@@ -41,6 +41,7 @@
                           <tr>
                             <th>#</th>
                             <th>Kategori Adı</th>
+                            <th>ID</th>
                             <th>Eylemler</th>
                           </tr>
                         </thead>
@@ -49,6 +50,7 @@
                           <tr>
                             <td><%= index + 1 %></td>
                             <td><%=category.name%></td>
+                            <td><%=category._id%></td>
                             <td ><a data-bs-toggle="tooltip" aria-label="Delete"
                                 data-bs-original-title="Ürünü Sil" id="<%=category._id%>" onclick="catchID(this.id);" type="button"><i class="ti ti-trash f-18"></i></a></td>
                           </tr>

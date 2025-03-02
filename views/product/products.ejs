@@ -173,7 +173,7 @@
             // Previous button
             const prevButton = document.createElement('li');
             prevButton.classList.add('page-item');
-            prevButton.innerHTML = `<a class="page-link mx-2" href="#">Geri</a>`;
+            prevButton.innerHTML = `<a class="page-link mx-2">Geri</a>`;
             prevButton.addEventListener('click', () => {
                 if (currentPage > 1) {
                     currentPage--;
@@ -187,7 +187,7 @@
             for (let i = 1; i <= totalPages; i++) {
                 const pageButton = document.createElement('li');
                 pageButton.classList.add('page-item');
-                pageButton.innerHTML = `<a class="page-link mx-2" href="#">${i}</a>`;
+                pageButton.innerHTML = `<a class="page-link mx-2">${i}</a>`;
                 pageButton.addEventListener('click', () => {
                     currentPage = i;
                     showPage(currentPage);
@@ -204,7 +204,7 @@
             // Next button
             const nextButton = document.createElement('li');
             nextButton.classList.add('page-item');
-            nextButton.innerHTML = `<a class="page-link mx-2" href="#">İleri</a>`;
+            nextButton.innerHTML = `<a class="page-link mx-2">İleri</a>`;
             nextButton.addEventListener('click', () => {
                 if (currentPage < totalPages) {
                     currentPage++;

@@ -1,6 +1,6 @@
 // controllers/authController.js
 const User = require('../models/User');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const ip = require('express-ip');
 const { RecaptchaV2 } = require('express-recaptcha');
 const recaptcha = new RecaptchaV2(process.env.RECAPTCHA_SITE_KEY, process.env.RECAPTCHA_SECRET_KEY);
