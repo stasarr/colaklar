@@ -1,0 +1,291 @@
+<style>
+    .scroll-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background-color: #4fa1f8;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 24px;
+        display: none; /* Başlangıçta gizli olacak */
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .scroll-to-top:hover {
+        background-color: #4688cf;
+    }
+
+    .partner-box {
+        position: relative;
+        display: inline-block;
+        margin: 10px;
+        width: 120px;
+        height: 120px;
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        overflow: hidden;
+    }
+
+    .partner-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 6px;
+    }
+
+    .delete-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: red;
+        color: white;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+        line-height: 20px;
+        display: none;
+    }
+
+    .partner-box:hover .delete-btn {
+        display: block;
+    }
+
+    .upload-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #partnerSelect {
+        color: blue;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .file-upload-area {
+        border: 2px dashed #ccc;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+    .upload-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #previewImage,
+    #previewImage-1,
+    #previewImage-2 {
+        max-width: 250px;
+        margin-top: 10px;
+        border-radius: 4px;
+        max-height: 35px;
+    }
+
+    #fileSelect,
+    #fileSelect-1,
+    #fileSelect-2 {
+        color: blue;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+</style>
+<%- include ('../../partials/header') %>
+    <div class="pc-container">
+        <div class="pc-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+                                <li class="breadcrumb-item"><a href="#">Ayarlar</a></li>
+                                <li class="breadcrumb-item" aria-current="page">Sosyal Medya</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h2 class="mb-0">Sosyal Medya</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+
+            <!-- [ Main Content ] start -->
+            <div class="row">
+                <!-- [ sample-page ] start -->
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="POST" action="/admin/settings/socialLinks">
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">Facebook</label>
+                                        <input name="facebook" id="facebook" type="url" class="form-control"
+                                            placeholder="facebook.com/username" value="<%=settings.socialLinks.facebook%>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">Instagram</label>
+                                        <input name="instagram" id="instagram" type="url" class="form-control"
+                                            placeholder="instagram.com/username" value="<%=settings.socialLinks.instagram%>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">Tiktok</label>
+                                        <input name="tiktok" id="tiktok" type="url" class="form-control"
+                                            placeholder="tiktok.com/username" value="<%=settings.socialLinks.tiktok%>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">LinkedIn</label>
+                                        <input name="linkedin" id="linkedin" type="url" class="form-control"
+                                            placeholder="linkedin.com/username" value="<%=settings.socialLinks.linkedin%>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">Twitter</label>
+                                        <input name="twitter" id="twitter" type="url" class="form-control"
+                                            placeholder="twitter.com/username" value="<%=settings.socialLinks.twitter%>">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">Youtube</label>
+                                        <input name="youtube" id="youtube" type="url" class="form-control"
+                                            placeholder="youtube.com/username" value="<%=settings.socialLinks.youtube%>">
+                                    </div>
+                                </div>
+                                <div class="pt-3">
+                                    <button type="submit" class="btn btn-secondary">
+                                        <i class="ti ti-plus f-18"></i> Kaydet
+                                    </button>
+                                </div>
+                            </form>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                    </div>
+                </div>
+                <!-- [ sample-page ] end -->
+            </div>
+            <!-- [ Main Content ] end -->
+
+            
+            <button id="scrollToTopBtn" class="scroll-to-top">
+                ⬆
+            </button>            
+
+            <div class="notifier-container" id="notifier-container" style="margin-top: 70px !important;"></div>
+
+            <!--[ Notification] start-->
+            <script>
+                'use strict';
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Sunucudan gelen hata mesajı
+                    const errorMessage = "<%= errorMessage ? errorMessage : '' %>";
+                    const successMessage = "<%= successMessage ? successMessage : '' %>";
+
+                    // Eğer bir hata mesajı varsa, uyarı bildirimi göster
+                    if (errorMessage) {
+                        notifier.show(
+                            'Uyarı!',
+                            errorMessage,
+                            'warning',
+                            '/dashboard/assets/images/notification/medium_priority-48.png',
+                            4000
+                        );
+                    }
+
+                    // Eğer bir başarı mesajı varsa, başarı bildirimi göster
+                    if (successMessage) {
+                        notifier.show(
+                            'Başarılı!',
+                            successMessage,
+                            'success',
+                            '/dashboard/assets/images/notification/ok-48.png',
+                            4000
+                        );
+                    }
+                });
+            </script>
+            <!--[ Notification] end-->
+
+        </div>
+    </div>
+
+
+
+    <!--[ visibility checkbox ] start-->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const checkboxes = document.querySelectorAll(".form-check-input");
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", async function () {
+                const settingKey = this.id; // Checkbox'un ID'si (ör: partnersVisibility)
+                const settingValue = this.checked; // Checkbox durumu (true / false)
+
+                try {
+                    const response = await fetch("/admin/settings/visibility", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            [settingKey]: settingValue
+                        })
+                    });
+
+                    if (!response.ok) {
+                        console.error("Ayar güncellenirken hata oluştu.");
+                    }
+                } catch (error) {
+                    console.error("Bağlantı hatası:", error);
+                }
+            });
+        });
+    });
+    </script>
+    <!--[ visibility checkbox ] end-->
+
+
+    <!-- [ scroll to top ] start-->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+        
+            window.addEventListener("scroll", function() {
+                if (window.scrollY > 300) {
+                    scrollToTopBtn.style.display = "flex"; // Butonu göster
+                } else {
+                    scrollToTopBtn.style.display = "none"; // Butonu gizle
+                }
+            });
+        
+            scrollToTopBtn.addEventListener("click", function() {
+                window.scrollTo({ top: 0, behavior: "smooth" }); // Sayfanın en üstüne kaydır
+            });
+        });
+    </script>
+    <!-- [ scroll to top ] end-->
+
+    <%- include ('../../partials/footer') %>

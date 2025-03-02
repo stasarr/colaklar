@@ -222,15 +222,15 @@ async function sociallinks(req, res, next) {
             await settings.save();
         } else {
             req.session.errorMessage = 'Lütfen tekrar deneyin!';
-            return res.redirect('/admin/settings');
+            return res.redirect('/admin/settings/socialmedia');
         }
 
         req.session.successMessage = 'Sosyal bağlantılar kaydedildi!';
-        return res.redirect('/admin/settings');
+        return res.redirect('/admin/settings/socialmedia');
     } catch (error) {
         console.log(error);
         req.session.errorMessage = 'Sosyal bağlantılar kaydedilirken bir hata meydana geldi';
-        return res.redirect('/admin/settings');
+        return res.redirect('/admin/settings/socialmedia');
     }
 }
 
@@ -259,15 +259,15 @@ async function banner(req, res, next) {
             await settings.save();
         } else {
             req.session.errorMessage = 'Lütfen tekrar deneyin!';
-            return res.redirect('/admin/settings');
+            return res.redirect('/admin/settings/homepage');
         }
 
         req.session.successMessage = 'Afiş ayarları kaydedildi!';
-        return res.redirect('/admin/settings');
+        return res.redirect('/admin/settings/homepage');
     } catch (error) {
         console.log(error);
         req.session.errorMessage = 'Afiş ayarları kaydedilirken bir hata meydana geldi';
-        return res.redirect('/admin/settings');
+        return res.redirect('/admin/settings/homepage');
     }
 }
 
@@ -364,11 +364,11 @@ async function bannerButtonAdd(req, res, next) {
 
         if (!buttonName) {
             req.session.errorMessage = 'Buton adı belirtmediniz!';
-            return res.redirect('/admin/settings');
+            return res.redirect('/admin/settings/homepage');
         }
         if (!buttonLink) {
             req.session.errorMessage = 'Buton linki belirtmediniz!';
-            return res.redirect('/admin/settings');
+            return res.redirect('/admin/settings/homepage');
         }
         if (!buttonTheme) {
             buttonTheme = true;
@@ -381,11 +381,11 @@ async function bannerButtonAdd(req, res, next) {
         );
 
         req.session.successMessage = 'Buton başarıyla eklendi';
-        return res.redirect('/admin/settings');
+        return res.redirect('/admin/settings/homepage');
     } catch (error) {
         console.log(error);
         req.session.errorMessage = 'Buton oluşturulurken bir hata meydana geldi';
-        return res.redirect('/admin/settings');
+        return res.redirect('/admin/settings/homepage');
     }
 }
 
@@ -442,25 +442,25 @@ async function serviceEdit(req, res, next) {
 
         if (!_id) {
             req.session.errorMessage = 'İçerik kimliği belirlenmemiş!';
-            return res.redirect('/admin/settings');
+            return res.redirect('/admin/settings/homepage');
         }
         if (!serviceAreaTitle) {
             req.session.errorMessage = 'İçerik başlığı boş bırakılamaz!';
-            return res.redirect('/admin/settings');
+            return res.redirect('/admin/settings/homepage');
         }
         if (!serviceAreaContent) {
             req.session.errorMessage = 'İçerik metni boş bırakılamaz!';
-            return res.redirect('/admin/settings');
+            return res.redirect('/admin/settings/homepage');
         }
         if (!serviceAreaIcon) {
             req.session.errorMessage = 'İçerik ikonu boş bırakılamaz!';
-            return res.redirect('/admin/settings');
+            return res.redirect('/admin/settings/homepage');
         }
 
 
         const updatedService = await Settings.updateOne(
             { "serviceArea._id": _id }, // _id ile eşleşen öğeyi bul
-            { 
+            {
                 $set: {
                     "serviceArea.$.serviceAreaTitle": serviceAreaTitle,
                     "serviceArea.$.serviceAreaContent": serviceAreaContent,
@@ -471,15 +471,15 @@ async function serviceEdit(req, res, next) {
 
         if (updatedService.modifiedCount === 0) {
             req.session.errorMessage = 'Güncellenecek içerik bulunamadı!';
-            return res.redirect('/admin/settings');
+            return res.redirect('/admin/settings/homepage');
         }
 
         req.session.successMessage = 'İçerik güncellendi!';
-        return res.redirect('/admin/settings');
+        return res.redirect('/admin/settings/homepage');
     } catch (error) {
         console.log(error);
         req.session.errorMessage = 'İçerik güncellenirken bir hata meydana geldi';
-        return res.redirect('/admin/settings');
+        return res.redirect('/admin/settings/homepage');
     }
 }
 
@@ -501,11 +501,11 @@ async function generalabout(req, res, next) {
 
         if (!generalInfoTitle) {
             req.session.errorMessage = 'Hakkında kutusu başlıksız bırakılamaz!';
-            return res.redirect('/admin/settings');
+            return res.redirect('/admin/settings/homepage');
         }
         if (!generalInfoContent) {
             req.session.errorMessage = 'Hakkında metni boş bırakılamaz!';
-            return res.redirect('/admin/settings');
+            return res.redirect('/admin/settings/homepage');
         }
 
         const settings = await Settings.findOne();
@@ -516,15 +516,15 @@ async function generalabout(req, res, next) {
             await settings.save();
         } else {
             req.session.errorMessage = 'Lütfen tekrar deneyin!';
-            return res.redirect('/admin/settings');
+            return res.redirect('/admin/settings/homepage');
         }
 
         req.session.successMessage = 'Hakkında kutusu başarıyla ayarlandı';
-        return res.redirect('/admin/settings');
+        return res.redirect('/admin/settings/homepage');
     } catch (error) {
         console.log(error);
         req.session.errorMessage = 'Hakkında kutusu ayarlanırken bir hata meydana geldi';
-        return res.redirect('/admin/settings');
+        return res.redirect('/admin/settings/homepage');
     }
 }
 
@@ -611,5 +611,45 @@ async function visibility(req, res, next) {
     }
 }
 
+async function featuredCategory(req, res, next) {
+    if (!req.session.user) {
+        return res.redirect('/signin');
+    }
 
-module.exports = { partnerAdd, partnerDelete, favicon, sitelogo, sitesettings, sociallinks, banner, footerMenuAdd, footerMenuDelete, bannerButtonAdd, bannerButtonDelete, serviceEdit, generalabout, footerEdit, visibility };
+    const userId = req.session.user._id;
+
+    let { firstFeaturedCategory, secondFeaturedCategory } = req.body;
+
+    firstFeaturedCategory = firstFeaturedCategory || null;
+    secondFeaturedCategory = secondFeaturedCategory || null;
+
+    try {
+        const user = await User.findOne({ _id: userId });
+
+        if (!user) {
+            return res.redirect('/signin');
+        }
+
+        const settings = await Settings.findOne();
+
+        if (settings) {
+            settings.firstFeaturedCategory = firstFeaturedCategory;
+            settings.secondFeaturedCategory = secondFeaturedCategory;
+            await settings.save();
+        } else {
+            req.session.errorMessage = 'Lütfen tekrar deneyin!';
+            return res.redirect('/admin/settings/homepage');
+        }
+
+        req.session.successMessage = 'Öne çıkan kategoriler başarıyla ayarlandı';
+        return res.redirect('/admin/settings/homepage');
+    } catch (error) {
+        console.log(error);
+        req.session.errorMessage = 'Öne çıkan kategoriler ayarlanırken bir hata meydana geldi';
+        return res.redirect('/admin/settings/homepage');
+    }
+
+}
+
+
+module.exports = { partnerAdd, partnerDelete, favicon, sitelogo, sitesettings, sociallinks, banner, footerMenuAdd, footerMenuDelete, bannerButtonAdd, bannerButtonDelete, serviceEdit, generalabout, footerEdit, visibility, featuredCategory };

@@ -48,6 +48,69 @@
     </div>
 </div>
 <!-- End banner area -->
+
+<!-- New items Start -->
+<div class="rn-new-items rn-section-gapTop">
+    <div class="container">
+        <div class="row mb--50 align-items-center">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                <h3 class="title mb--0" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">Öne Çıkan Ürünler</h3>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12 mt_mobile--15">
+                <div class="view-more-btn text-start text-sm-end" data-sal-delay="150" data-sal="slide-up"
+                    data-sal-duration="800">
+                    <a class="btn-transparent" href="/urunler">TÜMÜNÜ GÖR<i data-feather="arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="row g-5">
+            <% 
+                // Sandviç Paneller kategorisinin ID'si
+                const firstFeaturedCategory = `${settings.firstFeaturedCategory}`; // Kategorinin ID'si buraya yazılmalı
+
+                // Polikarbon Levhalar kategorisinin ID'si
+                const secondFeaturedCategory = `${settings.secondFeaturedCategory}`; // Kategorinin ID'si buraya yazılmalı
+
+                // Sandviç Paneller ürünlerini filtrele (kategori ID'si ile)
+                let sandwichProducts = allProduct.filter(item => item.category && item.category.toString() === firstFeaturedCategory).slice(0, 5);
+                let remainingSpace = 5 - sandwichProducts.length; // Kalan yer
+
+                // Polikarbon Levhalar ürünlerini filtrele ve eksik kalan yer kadar ekle
+                let polycarbonateProducts = allProduct.filter(item => item.category && item.category.toString() === secondFeaturedCategory).slice(0, remainingSpace);
+                let displayedProducts = [...sandwichProducts, ...polycarbonateProducts];
+
+                // Şimdi oluşturulacak listeyi döngüyle yazdırıyoruz
+                displayedProducts.forEach((itempro) => {
+            %>
+            <!-- start single product -->
+            <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800"
+                class="col-5 col-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="product-style-one no-overlay">
+                    <div class="card-thumbnail">
+                        <a href="/urunler/<%= itempro.productLink %>"><img src="<%= itempro.productImage1 %>"
+                                alt="NFT_portfolio" style="aspect-ratio: 1 / 1; object-fit: cover;"></a>
+                    </div>
+                    <a href="/urunler/<%= itempro.productLink %>"><span class="product-name mt-5"><%= itempro.productName %></span></a>
+                    <div class="bid-react-area">
+                        <div class="last-bid">
+                            <% 
+                                // Kategori adı almak için kategori ID'si ile kategori verisini buluyoruz
+                                let selectedCategory = (Array.isArray(allCategory) && itempro.category) 
+                                    ? allCategory.find(cat => cat._id?.toString() === itempro.category?.toString()) 
+                                    : null;
+                            %>
+                            <%= selectedCategory ? selectedCategory.name : 'Bilinmeyen Kategori' %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end single product -->
+            <% }) %>
+        </div>
+    </div>
+</div>
+<!-- New items End -->
+
 <!-- keyfeature area -->
 <div class="key-feature-area rn-section-gapTop">
     <div class="container">
@@ -86,68 +149,6 @@
 </div>
 <!-- About Market Place End -->
 <% } %>
-
-<!-- New items Start -->
-<div class="rn-new-items rn-section-gapTop">
-    <div class="container">
-        <div class="row mb--50 align-items-center">
-            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                <h3 class="title mb--0" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">Öne Çıkan Ürünler</h3>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 col-12 mt_mobile--15">
-                <div class="view-more-btn text-start text-sm-end" data-sal-delay="150" data-sal="slide-up"
-                    data-sal-duration="800">
-                    <a class="btn-transparent" href="/urunler">TÜMÜNÜ GÖR<i data-feather="arrow-right"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="row g-5">
-            <% 
-                // Sandviç Paneller kategorisinin ID'si
-                const sandwichCategoryId = '679d060a135668a118a96baf'; // Kategorinin ID'si buraya yazılmalı
-
-                // Polikarbon Levhalar kategorisinin ID'si
-                const polycarbonateCategoryId = '679d019b16ff38951a2fadde'; // Kategorinin ID'si buraya yazılmalı
-
-                // Sandviç Paneller ürünlerini filtrele (kategori ID'si ile)
-                let sandwichProducts = allProduct.filter(item => item.category && item.category.toString() === sandwichCategoryId).slice(0, 5);
-                let remainingSpace = 5 - sandwichProducts.length; // Kalan yer
-
-                // Polikarbon Levhalar ürünlerini filtrele ve eksik kalan yer kadar ekle
-                let polycarbonateProducts = allProduct.filter(item => item.category && item.category.toString() === polycarbonateCategoryId).slice(0, remainingSpace);
-                let displayedProducts = [...sandwichProducts, ...polycarbonateProducts];
-
-                // Şimdi oluşturulacak listeyi döngüyle yazdırıyoruz
-                displayedProducts.forEach((itempro) => {
-            %>
-            <!-- start single product -->
-            <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800"
-                class="col-5 col-lg-4 col-md-6 col-sm-6 col-12">
-                <div class="product-style-one no-overlay">
-                    <div class="card-thumbnail">
-                        <a href="/urunler/<%= itempro.productLink %>"><img src="<%= itempro.productImage1 %>"
-                                alt="NFT_portfolio" style="aspect-ratio: 1 / 1; object-fit: cover;"></a>
-                    </div>
-                    <a href="/urunler/<%= itempro.productLink %>"><span class="product-name mt-5"><%= itempro.productName %></span></a>
-                    <div class="bid-react-area">
-                        <div class="last-bid">
-                            <% 
-                                // Kategori adı almak için kategori ID'si ile kategori verisini buluyoruz
-                                let selectedCategory = (Array.isArray(allCategory) && itempro.category) 
-                                    ? allCategory.find(cat => cat._id?.toString() === itempro.category?.toString()) 
-                                    : null;
-                            %>
-                            <%= selectedCategory ? selectedCategory.name : 'Bilinmeyen Kategori' %>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- end single product -->
-            <% }) %>
-        </div>
-    </div>
-</div>
-<!-- New items End -->
 
 <!-- New items Start -->
 <div class="rn-new-items rn-section-gapTop">

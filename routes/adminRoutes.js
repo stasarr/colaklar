@@ -44,7 +44,19 @@ router.get('/', authController.requireLogin, authController.requireModerator, (r
 });
 
 router.get('/settings', authController.requireLogin, authController.requireAdmin, (req, res) => {
-    res.render('admin/manage/settings');
+    res.render('admin/manage/settings/settings');
+});
+
+router.get('/settings/homepage', authController.requireLogin, authController.requireAdmin, (req, res) => {
+    res.render('admin/manage/settings/homepage');
+});
+
+router.get('/settings/brands', authController.requireLogin, authController.requireAdmin, (req, res) => {
+    res.render('admin/manage/settings/brands');
+});
+
+router.get('/settings/socialmedia', authController.requireLogin, authController.requireAdmin, (req, res) => {
+    res.render('admin/manage/settings/socialmedia');
 });
 
 router.get('/users', authController.requireLogin, authController.requireAdmin, (req, res) => {
@@ -129,6 +141,7 @@ router.post('/settings/bannerbutton/delete', authController.requireLogin, authCo
 router.post('/settings/generalabout', authController.requireLogin, authController.requireAdmin, settingsController.generalabout);
 router.post('/settings/footeredit', authController.requireLogin, authController.requireAdmin, settingsController.footerEdit);
 router.post('/settings/visibility', authController.requireLogin, authController.requireAdmin, settingsController.visibility);
+router.post('/settings/featuredcategory', authController.requireLogin, authController.requireAdmin, settingsController.featuredCategory);
 
 router.post('/users/add', authController.requireLogin, authController.requireAdmin, authController.userAdd);
 router.post('/users/delete', authController.requireLogin, authController.requireAdmin, authController.userDelete);

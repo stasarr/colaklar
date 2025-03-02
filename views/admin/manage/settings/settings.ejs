@@ -1,0 +1,522 @@
+<style>
+    .scroll-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background-color: #4fa1f8;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 24px;
+        display: none; /* Başlangıçta gizli olacak */
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .scroll-to-top:hover {
+        background-color: #4688cf;
+    }
+
+    .partner-box {
+        position: relative;
+        display: inline-block;
+        margin: 10px;
+        width: 120px;
+        height: 120px;
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        overflow: hidden;
+    }
+
+    .partner-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 6px;
+    }
+
+    .delete-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: red;
+        color: white;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+        line-height: 20px;
+        display: none;
+    }
+
+    .partner-box:hover .delete-btn {
+        display: block;
+    }
+
+    .upload-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #partnerSelect {
+        color: blue;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .file-upload-area {
+        border: 2px dashed #ccc;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+    .upload-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #previewImage,
+    #previewImage-1,
+    #previewImage-2 {
+        max-width: 250px;
+        margin-top: 10px;
+        border-radius: 4px;
+        max-height: 35px;
+    }
+
+    #fileSelect,
+    #fileSelect-1,
+    #fileSelect-2 {
+        color: blue;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+</style>
+<%- include ('../../partials/header') %>
+    <div class="pc-container">
+        <div class="pc-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+                                <li class="breadcrumb-item"><a href="#">Ayarlar</a></li>
+                                <li class="breadcrumb-item" aria-current="page">Site Ayarları</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h2 class="mb-0">Site Ayarları</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+
+            <!-- [ Main Content ] start -->
+            <div class="row">
+                <!-- [ sample-page ] start -->
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="POST" action="/admin/settings/sitesettings">
+                                <div class="form-group">
+                                    <label class="form-label">Site Adı</label>
+                                    <input name="siteName" id="siteName" type="text" class="form-control"
+                                        placeholder="Site adını girin" value="<%=settings.siteName%>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Meta Anahtar Kelimeler</label>
+                                    <input name="siteKeywords" class="form-control" id="choices-text-remove-button-2"
+                                        type="text" placeholder="Enter something" value="<%=settings.siteKeywords%>">
+                                    <small>Anahtar kelime yazın ve enter tuşuna basın</small>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Site Açıklaması</label>
+                                    <textarea name="siteDesc" type="text" class="form-control"
+                                        placeholder="Site açıklaması girin" required><%=settings.siteDesc%></textarea>
+                                </div>
+                                <div class="pt-3">
+                                    <button type="submit" class="btn btn-secondary">
+                                        <i class="ti ti-plus f-18"></i> Kaydet
+                                    </button>
+                                </div>
+                            </form>
+                            <hr class="mt-5 mb-5">
+                            <!-- [ file-upload ] start -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Site Favicon</label>
+                                    <div id="drop-area" class="file-upload-area">
+                                        <input type="file" id="fileInput" accept="image/*" hidden>
+                                        <div class="upload-box">
+                                            <p>Resmi sürükleyin veya <span id="fileSelect">seçin</span></p>
+                                            <img id="previewImage" src="<%= settings.siteFavicon %>" alt="Önizleme" <% if (settings.siteLogo) {} else {%>style="display: none;"<%}%>>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Site Logo</label>
+                                    <div id="drop-area-1" class="file-upload-area">
+                                        <input type="file" id="fileInput-1" accept="image/*" hidden>
+                                        <div class="upload-box">
+                                            <p>Resmi sürükleyin veya <span id="fileSelect-1">seçin</span></p>
+                                            <img id="previewImage-1" src="<%= settings.siteLogo %>" alt="Önizleme" <% if (settings.siteLogo) {} else {%>style="display: none;"<%}%>>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="siteFavicon" value="">
+                            <input type="hidden" id="siteLogo" value="">
+                            <!-- [ file-upload ] end -->
+                            <div class="mb-3 mt-5">
+                                <h3 id="details-5">Footer Ayarları</h3>
+                            </div>
+                            <form method="post" action="/admin/settings/footerEdit">
+                                <div class="form-group">
+                                    <label class="form-label">Footer Atıf</label>
+                                    <input name="footerCopyright" id="footerCopyright" type="text" class="form-control"
+                                        placeholder="Footer atıfı girin" value="<%= settings.footerCopyright %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Footer Açıklaması</label>
+                                    <textarea name="footerDesc" id="footerDesc" type="text" class="form-control"
+                                        placeholder="Footer açıklaması girin" required><%=settings.footerDesc%></textarea>
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-secondary">
+                                        <i class="ti ti-plus f-18"></i> Kaydet
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="row mt-3">
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card table-card">
+                                        <div class="card-body">
+                                            <div class="p-4 pb-0">
+                                                <p>Footer kısmına eklenmiş olan menüyü düzenleyin.</p>
+                                            </div>
+                                            <% if (settings.footerMenu.length < 6) { %>
+                                            <div class="p-4">
+                                                <a href="#" class="btn btn-light-secondary"
+                                                    data-bs-toggle="modal" data-bs-target="#add_footer_menu">
+                                                    <i class="ti ti-plus f-18"></i> Buton Ekle
+                                                </a>
+                                                <small>En fazla 6 buton ekleyin</small>
+                                            </div>
+                                            <% } else { %>
+                                            <div class="p-4">
+                                                <small>Buton sınırına ulaştın. Buton ekleyebilmek için butonlardan birini ya da birkaçını kaldırın.</small>
+                                            </div>
+                                            <% } %>
+                                            <div class="table-responsive">
+                                                <div class="dataTable-container">
+                                                    <table class="table table-hover dataTable-table" id="pc-dt-simple">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-end" style="width: 5%;">#</th>
+                                                                <th style="width: 35.2577%;">Menu</th>
+                                                                <th class="text-center" style="width: 16%;">
+                                                                    Eylemler</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% settings.footerMenu.forEach((footermenu, index)=> { %>
+                                                                <tr>
+                                                                    <td class="text-end">
+                                                                        <%= index + 1 %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <h6 class="mb-1">
+                                                                                    <%= footermenu.menuName %>
+                                                                                </h6>
+                                                                                <p class="text-muted f-12 mb-0">
+                                                                                    <%= footermenu.menuLink %>
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <ul
+                                                                            class="list-inline me-auto mb-0">
+                                                                            <li class="list-inline-item align-bottom"
+                                                                                data-bs-toggle="tooltip"
+                                                                                aria-label="Delete"
+                                                                                data-bs-original-title="Sil">
+                                                                                <a id="footermenu-<%= footermenu._id %>"
+                                                                                    class="avtar avtar-xs btn-link-danger btn-pc-default"
+                                                                                    type="button" onclick="catchID(this.id);">
+                                                                                    <i
+                                                                                        class="ti ti-trash f-18"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                </tr>
+                                                                <% }) %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                    </div>
+                </div>
+                <!-- [ sample-page ] end -->
+            </div>
+            <!-- [ Main Content ] end -->
+
+            <!-- [ Add Button Modal ] start -->
+            <div class="modal fade" id="add_footer_menu" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Footer Menu Ekleme Penceresi</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="/admin/settings/footermenu/add">
+                                <div class="form-group">
+                                    <label for="menuName" class="col-form-label">Menu Adı</label>
+                                    <input type="text" class="form-control" name="menuName" autocomplete="off" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="menuLink" class="col-form-label">Menü Linki</label>
+                                    <input type="text" class="form-control" name="menuLink" autocomplete="off" required>
+                                </div>
+                                <div class="form-group pt-3">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Kapat</button>
+                                    <button type="submit" class="btn btn-primary">Oluştur</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ Add Button Modal ] end -->
+
+            <button id="scrollToTopBtn" class="scroll-to-top">
+                ⬆
+            </button>            
+
+            <div class="notifier-container" id="notifier-container" style="margin-top: 70px !important;"></div>
+
+            <!--[ Notification] start-->
+            <script>
+                'use strict';
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Sunucudan gelen hata mesajı
+                    const errorMessage = "<%= errorMessage ? errorMessage : '' %>";
+                    const successMessage = "<%= successMessage ? successMessage : '' %>";
+
+                    // Eğer bir hata mesajı varsa, uyarı bildirimi göster
+                    if (errorMessage) {
+                        notifier.show(
+                            'Uyarı!',
+                            errorMessage,
+                            'warning',
+                            '/dashboard/assets/images/notification/medium_priority-48.png',
+                            4000
+                        );
+                    }
+
+                    // Eğer bir başarı mesajı varsa, başarı bildirimi göster
+                    if (successMessage) {
+                        notifier.show(
+                            'Başarılı!',
+                            successMessage,
+                            'success',
+                            '/dashboard/assets/images/notification/ok-48.png',
+                            4000
+                        );
+                    }
+                });
+            </script>
+            <!--[ Notification] end-->
+
+        </div>
+    </div>
+
+
+    <!-- [footer menu kaldırma] start -->
+    <script>
+        function catchID(clicked_id) {
+            var _id = clicked_id
+
+            if (!_id) {
+                return alert('Bir hata oluştu :( Lütfen sayfayı yenileyin.')
+            }
+
+            if (_id.startsWith("footermenu-")) {
+                _id = _id.slice(11);
+                var confirmDelete = confirm('Bağlantıyı menüden kaldırmak istediğinizden emin misiniz?');
+
+                if (confirmDelete) {
+                $.post('/admin/settings/footermenu/delete', { _id }, function (data) {
+                    window.location.href = '/admin/settings';
+                });
+                }
+            }
+        };
+
+    </script>
+    <!-- [footer menu kaldırma] end -->
+
+
+
+    <!-- [ favicon, sitelogo upload ] start-->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        setupFileUpload("drop-area", "fileInput", "previewImage", "siteFavicon", "/admin/settings/favicon");
+        setupFileUpload("drop-area-1", "fileInput-1", "previewImage-1", "siteLogo", "/admin/settings/sitelogo");
+
+        function setupFileUpload(dropAreaId, fileInputId, previewImageId, hiddenInputId, uploadUrl) {
+            const dropArea = document.getElementById(dropAreaId);
+            const fileInput = document.getElementById(fileInputId);
+            const previewImage = document.getElementById(previewImageId);
+            const hiddenInput = document.getElementById(hiddenInputId);
+            const fileSelect = dropArea.querySelector("span");
+
+            fileSelect.addEventListener("click", () => fileInput.click());
+
+            dropArea.addEventListener("dragover", (event) => {
+                event.preventDefault();
+                dropArea.style.borderColor = "blue";
+            });
+
+            dropArea.addEventListener("dragleave", () => {
+                dropArea.style.borderColor = "#ccc";
+            });
+
+            dropArea.addEventListener("drop", (event) => {
+                event.preventDefault();
+                dropArea.style.borderColor = "#ccc";
+                let file = event.dataTransfer.files[0];
+                handleFile(file);
+            });
+
+            fileInput.addEventListener("change", function () {
+                let file = this.files[0];
+                handleFile(file);
+            });
+
+            function handleFile(file) {
+                if (file && file.type.startsWith("image/")) {
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        previewImage.src = e.target.result;
+                        previewImage.style.display = "block";
+                    };
+                    reader.readAsDataURL(file);
+
+                    uploadToImgBB(file);
+                } else {
+                    alert("Lütfen bir resim dosyası seçin.");
+                }
+            }
+
+            function uploadToImgBB(file) {
+                let formData = new FormData();
+                formData.append("image", file);
+
+                fetch("https://api.imgbb.com/1/upload?key=<%=IMGBB_API_KEY%>", {
+                    method: "POST",
+                    body: formData,
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            let imageUrl = data.data.url;
+                            hiddenInput.value = imageUrl;
+                            console.log(`Yüklenen ${hiddenInputId} URL:`, imageUrl);
+
+                            // Siteye POST et
+                            sendToServer(uploadUrl, imageUrl);
+                        } else {
+                            alert("Resim yükleme başarısız oldu!");
+                        }
+                    })
+                    .catch(error => console.error("Yükleme hatası:", error));
+            }
+
+            function sendToServer(url, imageUrl) {
+                fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ imageUrl: imageUrl })
+                });
+
+                // 1 saniye sonra sayfayı yenile
+                setTimeout(() => location.reload(), 1000);
+            }
+        }
+    });
+    </script>
+    <!-- [ favicon, sitelogo upload ] end-->
+
+
+
+    <!-- [ scroll to top ] start-->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+        
+            window.addEventListener("scroll", function() {
+                if (window.scrollY > 300) {
+                    scrollToTopBtn.style.display = "flex"; // Butonu göster
+                } else {
+                    scrollToTopBtn.style.display = "none"; // Butonu gizle
+                }
+            });
+        
+            scrollToTopBtn.addEventListener("click", function() {
+                window.scrollTo({ top: 0, behavior: "smooth" }); // Sayfanın en üstüne kaydır
+            });
+        });
+    </script>
+    <!-- [ scroll to top ] end-->
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            var textRemove = new Choices(document.getElementById('choices-text-remove-button-2'), {
+                delimiter: ',',
+                editItems: true,
+                maxItemCount: 25,
+                removeItemButton: true
+            });
+        });
+    </script>
+    <%- include ('../../partials/footer') %>

@@ -126,6 +126,20 @@ const SettingsSchema = new mongoose.Schema(
             required: false,
             unique: false,
         },
+        firstFeaturedCategory: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Category',
+            required: false,
+            unique: false,
+            default: null,
+        },
+        secondFeaturedCategory: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Category',
+            required: false,
+            unique: false,
+            default: null,
+        },
    
 
     },
